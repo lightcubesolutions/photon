@@ -1,0 +1,192 @@
+/* 
+   Global Layout/Content/Link Styles 
+   For IE6 Use 
+   Version 2.0
+   Coded 12-15-09
+   Last Updated 12-15-09
+*/
+
+
+/* +GLOBAL =LAYOUT --> Manages all major structural elements, uncluding top-level divs
+--------------------------------------------------------------------> */
+
+
+#m_megawrap { /* (Site Container) */
+ width: 950px;
+ text-align: left;
+ /* Safe & Easy center positioning - works with just about every browser in existence */
+ position: relative;
+ left: 50%;
+ margin-left: -475px;
+}
+
+#m_headwrap {
+ width: 950px;
+ height: 125px;
+ float: left;
+ background: url(../Images/m_headback.jpg) no-repeat top left;
+}
+
+#m_bodywrap {
+ width: 930px;
+ float: left;
+ background: url(../Images/m_bodyback.png) repeat-y center;
+ padding: 0px 10px 10px 10px;
+ min-height: 350px;
+}
+
+#m_footwrap {
+ height: 36px;
+ padding: 0px 0px 0px 0px;
+ width: 950px;
+ background: url(../Images/m_footback.png) no-repeat top center;
+ float: left;
+}
+
+body {
+ font-family: Georgia, "Times New Roman", Times, serif;
+ color: #000;
+ border: 0;
+ background: url(../Images/m_megaback.jpg) no-repeat top center #356a82;
+}
+
+h1, h2, h3, h4, h5, h6 {
+ font-size: 16px;
+ padding: 10px 0px 10px 0px;
+}
+
+
+
+/* +NAVIGATION =LAYOUT --> Controls top-level menu items, ect.
+--------------------------------------------------------------------> */
+
+ul#m_navwrap {
+ width: 940px;
+ height: 43px;
+ float: left;
+ display: block;
+ padding: 10px 0px 0px 10px;
+ background: url(../Images/m_navback.jpg) no-repeat top left;
+}
+
+ul#m_navwrap li {
+ height: 19px;
+ float: left;
+ padding: 1px 12px 0px 12px;
+ display: block;
+ border-right: 1px solid #fff;
+}
+
+ul#m_navwrap li a {
+ float: left;
+ display: block;
+ font-size: 20px;
+ padding: 0px 0px 3px 0px;
+ font-weight: bold;
+ color: #fff;
+ margin: -6px 0px 0px 0px;
+}
+
+ul#m_navwrap li.lastli {
+ border-right: none;
+} 
+
+
+a {
+ font-family: Georgia, "Times New Roman", Times, serif;
+ font-size: 14px;
+ color: #000;
+}
+
+a:link {
+ color: #000;
+}
+
+a:visited {
+ color: #000;
+}
+
+a:hover {
+ color: #666;
+}
+
+a:active {
+ color: #000;
+}
+
+
+
+/* +NAVIGATION =ROLLOVER --> Explains itself
+--------------------------------------------------------------------> */
+
+ul#m_navwrap li a:hover {
+ color: #ffae00;
+ border-bottom: 1px dotted #ffae00;
+}
+
+
+/* +NAVIGATION =CURRENT --> Controls current page placements
+--------------------------------------------------------------------> */
+
+#index li#home a, 
+#purchase li#purc a, 
+#resources li#reso a, 
+#contact li#cont a {
+ color: #ffae00;
+ border-bottom: 1px dotted #ffae00;
+}
+
+/* Seperate styles for the footer - yellow doesn't look so good on grey. */
+#index #m_footwrap li#home a, 
+#purchase #m_footwrap li#purc a, 
+#resources #m_footwrap li#reso a, 
+#contact #m_footwrap li#cont a {
+ color: #295a79;
+ border-bottom: 1px dotted #295a79;
+}
+
+
+/* +GLOBAL =CONTENT --> Controls globally appearing content - if the ID or class appears on more than one page, it's here
+--------------------------------------------------------------------> */
+
+#m_headwrap h1 {
+ display: block;
+ float: left;
+ padding: 45px 0px 0px 20px;
+}
+
+#m_headwrap h1 a {
+ font-size: 66px;
+ text-shadow: 2px 2px 2px #fff; /* Not working! Maybe another issue with Cufon? */
+}
+
+#m_footwrap ul {
+ width: 350px;
+ height: 28px;
+ padding: 8px 0px 0px 0px;
+ margin: 0px 0px 0px -175px;
+ left: 50%;
+ position: relative;
+ display: block;
+}
+
+#m_footwrap ul li {
+ display: block;
+ float: left;
+ padding: 0px 14px 4px 14px;
+ border-right: 1px dashed #ccc;
+}
+
+#m_footwrap ul li.last {
+ border: none;
+}
+
+
+
+
+/* +ERROR =LAYOUT 
+--------------------------------------------------------------------> */
+
+
+/* +ERROR =CONTENT 
+--------------------------------------------------------------------> */

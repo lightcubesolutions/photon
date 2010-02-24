@@ -1,0 +1,3 @@
+To get started, at the least you will need to copy
+example_config.php to config.php and example_dbconfig.php
+to dbconfig.php and edit their contents.

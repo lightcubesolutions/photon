@@ -1,0 +1,9 @@
+.svn
+.project
+.buildpath
+dbconfig.php
+config.php
+antconfig.txt
+build.xml
+rsync_excludes
+.settings

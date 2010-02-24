@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ An ant build file for synching files
+ 
+ @author    LightCube Solutions
+ @link      http://www.lightcubesolutions.com
+ @copyright Copyright (C) 2009 LightCube Solutions, LLC. All rights reserved.
+ @license   http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
+-->
+<project name="photon" default="rsync" basedir=".">
+    <description>Ant Build File</description>
+
+    <!-- load variables from config file -->
+    <property name="cfg.configFile" location="antconfig.txt" />
+    <loadproperties srcfile="${cfg.configFile}" />
+
+    <!--config file values
+    cfg.name=photon
+    cfg.localhostRoot=
+
+    rsync.server=dev.lightcube.us
+    rsync.user=username
+    rsync.dir=/home/username/public_html/photon
+    -->
+
+    <property name="cfg.comName" value="${cfg.name}" />
+    
+    <target name="info" description="prints information">
+        <echo message="Project:            ${cfg.name}" />
+        <tstamp>
+            <format property="buildtime" pattern="yyyy-MM-dd'T'HH:mm:ss" />
+        </tstamp>
+        <echo message="Buildtime:    ${buildtime}" />
+    </target>
+
+    <target name="update_localhost" description="attemps to update files on localhost server with files from working directory">
+        <condition property="destdir" value="${tmpdir}" else="${cfg.localhostRoot}" >
+            <available file="${tmpdir}" type="dir" />
+        </condition>
+        <copy todir="${destdir}" preservelastmodified="true" overwrite="true">
+            <fileset dir="." />
+        </copy>
+    </target>
+
+    <target name="rsync" description="attemps to synchronize files on a remote server with files from working directory">
+        <exec executable="mktemp" outputproperty="rawtmpdir">
+            <arg line="-d -t XXXXXXXXXXXX" />
+        </exec>
+        <exec executable="cygpath" osfamily="windows" outputproperty="wintmpdir">
+            <arg line="-w ${rawtmpdir}" />
+        </exec>
+        <condition property="tmpdir" value="${wintmpdir}" else="${rawtmpdir}">
+            <os family="windows" />
+        </condition>
+        <antcall target="update_localhost"></antcall>
+        <exec executable="rsync" dir="${tmpdir}">
+            <arg line="-aOvz --delete --chmod=g+w,Da+rX,Fa+r,F-X --exclude-from=rsync_excludes . ${rsync.user}@${rsync.server}:${rsync.dir}/" />
+        </exec>
+        <delete dir="${tmpdir}" />
+    </target>
+
+</project>
