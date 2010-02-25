@@ -7,7 +7,7 @@ Released for free under a Creative Commons Attribution 2.5 License
 body {
 	margin-top: 80px;
 	padding: 0;
-	background: #000000 url(Images/img01.gif) repeat-x center top;
+	background: #000000 url(Images/bg.jpg) repeat-x center top;
 	font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	color: #AFAFAF;
@@ -339,7 +339,7 @@ hr { display: none; }
 #sidebar li li {
 	margin: 0;
 	padding: 10px 0px;
-	background: url(Images/img03.gif) no-repeat left 16px;
+	background: url(Images/bullet.gif) no-repeat left 16px;
 }
 
 #sidebar li li a {
