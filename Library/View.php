@@ -87,7 +87,7 @@ class View
             }
 
             // Open the default view, if template is empty.
-            if (empty($this->template)) {
+            if (empty($this->template)) {                
                 $this->template = 'Modules/Home/Views/v_home.html';
             }
             
@@ -126,7 +126,8 @@ class View
                 
                 if (file_exists("Themes/$this->theme/header.html")) {
                     ob_start();
-                    $smarty->display("Themes/$this->theme/header.html");
+                    $smarty->template_dir = "Themes/$this->theme";
+                    $smarty->display('header.html');
                     $html .= ob_get_contents();
                     ob_end_clean();
                 }
@@ -135,7 +136,8 @@ class View
                 
                 if (file_exists("Themes/$this->theme/footer.html")) {
                     ob_start();
-                    $smarty->display("Themes/$this->theme/footer.html");
+                    $smarty->template_dir = "Themes/$this->theme";
+                    $smarty->display('footer.html');
                     $html .= ob_get_contents();
                     ob_end_clean();
                 }
