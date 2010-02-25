@@ -36,7 +36,7 @@ if(isset($_POST)) {
     }
 }
 
-$model->getDocuments();
+$model->getData();
 $cur = $model->cursor;
 foreach($cur as $obj){
     $obj['_id'] = $obj["_id"];

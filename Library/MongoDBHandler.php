@@ -21,7 +21,7 @@ class MongoDBHandler
     public $db;          // The actual DB object.
     public $grid; 		 // Grid object
     public $fileid; 	 // The mongoid of a stored file
-    public $col;
+    public $col;		 // The MongoDB Collection Object
     
     private $_link;      // The link to the server.
     private $_connected; // Status of the server connection.
@@ -74,16 +74,14 @@ class MongoDBHandler
      * @param array $where
      * @return boolean
      */
-    function getData($collection, $sort = array(), $where = array())
+    function getData($sort = array(), $where = array())
     {
         $retval = false;
         // Only try if the connection has been established.
         if ($this->_connected) {
-            // Specify the collection.
-            $col = $this->db->$collection;
-                        
+                                    
             // Grab the data
-            $this->cursor = $col->find($where);
+            $this->cursor = $this->col->find($where);
 
             if ($this->cursor->count() > 0) {
                 $retval = true;
@@ -147,24 +145,7 @@ class MongoDBHandler
     		$retval = true;
     	}
     	return $retval;
-    }
-    function getDocuments($sort = array(), $where = array())
-    {
-        $retval = false;
-        // Only try if the connection has been established.
-        if ($this->_connected) {
-                                    
-            // Grab the data
-            $this->cursor = $this->col->find($where);
-
-            if ($this->cursor->count() > 0) {
-                $retval = true;
-                $this->cursor->sort($sort);
-            }
-        }
-        return $retval;
-    }
-    
+    }    
 }
 
 ?>
