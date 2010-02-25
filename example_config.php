@@ -12,6 +12,9 @@ $appkey = 'x2OpmMkHTay1';
 // Timezone
 $tz = 'America/New_York';
 
+// Use the HTML Tidy class to clean up the HTML output?
+$usetidy = false;
+
 // DB connection params
 // FIXME: find a more elegant way to do the below.
 require_once('Library/MongoDBHandler.php');

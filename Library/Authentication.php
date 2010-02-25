@@ -1,15 +1,15 @@
 <?php
 /**
- * SecureLogin class
- *
- * @extends DBConn
- *
+ * Authentication class
+ * 
+ * @package photon
  * @version 1.0
- * @copyright LightCube Solutions, LLC. 2009
  * @author LightCube Solutions <info@lightcubesolutions.com>
+ * @copyright LightCube Solutions, LLC. 2010
+ * @license 
  */
  
-class SecureLogin extends DBConn
+class Authentication
 {
 
     // A JavaScript function which is embedded in the HTML header.
@@ -51,8 +51,9 @@ class SecureLogin extends DBConn
      */
     function setSessionInfo($user)
     {
-        if ($this->getData('Users', '', array('LoginName'=>$user))) {
-            $data = $this->cursor->getNext();
+        $db = new DBConn;
+        if ($db->getData('Users', '', array('LoginName'=>$user))) {
+            $data = $db->cursor->getNext();
             $_SESSION['LoginName']   = $data['LoginName'];
             $_SESSION['FirstName']   = ucwords(strtolower($data['FirstName']));
             $_SESSION['LastName']    = ucwords(strtolower($data['LastName']));
@@ -65,18 +66,18 @@ class SecureLogin extends DBConn
      * checkSession function.
      * 
      * @access public
-     * @param mixed $ip
      * @return void
      */
-    function checkSession($ip)
+    function checkSession()
     {
         $dt = new DateTime;
         $timestamp = $dt->format('U');
         $id = session_id();
+        $db = new DBConn;
 
-        if ($this->getData('ActiveSessions', '', array('SessionID'=>$id))) {
-            $data = $this->cursor->getNext();
-            if ($data['IP'] == ip2long($ip)) {
+        if ($db->getData('ActiveSessions', '', array('SessionID'=>$id))) {
+            $data = $db->cursor->getNext();
+            if ($data['IP'] == ip2long($_SERVER['REMOTE_ADDR'])) {
                 // Session has already been recorded & the IP address matches
                 // Just make sure the key exists and the session hasn't expired. 
                 if (empty($_SESSION['key']) || ($timestamp - $_SESSION['timestamp']) >= $this->_timeout) {
@@ -106,8 +107,9 @@ class SecureLogin extends DBConn
     function resetSession()
     {
         $id = session_id();
+        $db = new DBConn;
         $this->login_form = true;
-        $col = $this->db->ActiveSessions;
+        $col = $db->db->ActiveSessions;
         $col->remove(array('SessionID'=>$id));
         $_SESSION = array();
     }
@@ -137,8 +139,9 @@ class SecureLogin extends DBConn
     function getPassword($user)
     {
         $retval = false;
-        if ($this->getData('Users', '', array('LoginName'=>"$user", 'IsEnabled'=>1))) {
-            $row = $this->cursor->getNext();
+        $db = new DBConn;
+        if ($db->getData('Users', '', array('LoginName'=>"$user", 'IsEnabled'=>1))) {
+            $row = $db->cursor->getNext();
             $retval = $row['Password'];
         }
         return $retval;
@@ -149,19 +152,19 @@ class SecureLogin extends DBConn
      * recordLogin function.
      * 
      * @access public
-     * @param mixed $ip
      * @return boolean
      */
-    function recordLogin($ip)
+    function recordLogin()
     {
         $retval = false;
         $id = session_id();
-        $col = $this->db->ActiveSessions;
+        $db = new DBConn;
+        $col = $db->db->ActiveSessions;
         try {
-            $col->insert(array('SessionID'=>$id, 'IP'=>ip2long($ip)), true);
+            $col->insert(array('SessionID'=>$id, 'IP'=>ip2long($_SERVER['REMOTE_ADDR'])), true);
             $retval = true;
         } catch(MongoCursorException $e) {
-            $this->error = $e;
+            $db->error = $e;
         }
         return $retval;
     }

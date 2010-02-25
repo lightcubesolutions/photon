@@ -5,55 +5,57 @@
  * @package photon
  * @version 1.0
  * @author LightCube Solutions <info@lightcubesolutions.com>
- * @copyright LightCube Solutions, LLC. 2009
+ * @copyright LightCube Solutions, LLC. 2010
+ * @license FIXME: Determine license
  */
 
-// Include necessary files - the order here is important.
-require('config.php');      // Contains global configuration
-require('dbconfig.php');    // Contains DB configuration
-require('Classes/SecureLogin.class.inc');
-require('Classes/RequestHandler.class.inc');
-require('Classes/UserInterface.class.inc');
+// Include site configuration.
+require('config.php');
 
-// Stores the client's IP address globally
-$ip = $_SERVER['REMOTE_ADDR'];
+// Include necessary Libraries
+require('Library/Dispatcher.php');
+require('Library/Authentication.php');
+require('Library/View.php');
+
+// Instantiate new global instances of classes we will reuse.
+$dispatch = new Dispatcher;
+$auth = new Authentication;
+$view = new View;
+
+// Set the use tidy option.
+$view->usetidy = $usetidy;
 
 // Start the PHP session
 session_name($appkey);
 session_start();
 
 // Defined constant to prevent subfiles from being accessed directly.
-define("_CFEXEC", true);
+define("__photon", true);
 
 // Set default TimeZone
-date_default_timezone_set('America/New_York');
-
-// Instantiate new global instances of classes we will reuse.
-$db = new DBConn;
-$sl = new SecureLogin;
-$rq = new RequestHandler;
-$ui = new UserInterface;
+date_default_timezone_set($tz);
 
 // Make sure the Session isn't expired or the recorded IP is invalid
-$sl->checkSession($ip);
+$auth->checkSession();
 
 // Parse the Query Parameters given, which is in the $_REQUEST array
-$rq_result = $rq->parse($_REQUEST);
+$dispatch->parse($_REQUEST);
 
 // No action found in the DB. Just use the default as set in config.php
-if ($rq_result === false) {
-    $rq_result = $rq->parse(array('a'=>$default_action));
+if ($dispatch->status === false) {
+    $dispatch->parse(array('a'=>$default_action));
 }
 
-if (!empty($rq->special)) {
+if (!empty($dispatch->special)) {
 
     // Handle the special login or logout request if it was given
-    switch ($rq->special) {
+    // FIXME: Have view output the below.
+    switch ($dispatch->special) {
 
         case 'login':
-            if ($sl->login($_REQUEST['h'], $_REQUEST['u'])) {
-                $sl->recordLogin($ip);
-                $sl->setSessionInfo($_REQUEST['u']);
+            if ($auth->login($_REQUEST['h'], $_REQUEST['u'])) {
+                $auth->recordLogin();
+                $auth->setSessionInfo($_REQUEST['u']);
 
                 // Set the action - use a previously requested query, if it was requested before login
                 // Otherwise, use the default
@@ -74,78 +76,32 @@ if (!empty($rq->special)) {
             break;
 
         case 'logout':
-            $sl->logout();
+            $auth->logout();
 
             // Redirect to empty request.
             header('Location: ?');
             break;
     }
+    
 } else {
-    // This is a normal request.
+    // Set up the Login form if we need to.
+    if ($auth->login_form) {
 
-    if ($rq->smarty) {
-        // Set up and use the Smarty engine to display HTML.
-        require('Classes/Smarty_config.class.inc');
-        $smarty = new MySmarty;
-
-        // Set up the Login form if we need to.
-        if ($sl->login_form) {
-
-            $smarty->assign('login_form', true);
-            
-            $_SESSION['key'] = $sl->randomString(20);
-            $_SESSION['prev_query'] = $_SERVER['QUERY_STRING'];
-
-            $smarty->assign('key', $_SESSION['key']);
-            $smarty->assign('title', "$shortappname :: Login");
-            $smarty->assign('login_script', $sl->login_script);
-
-        } else {
-            // Set up the logout link
-            $smarty->assign('loggedin', true);
-            $smarty->assign('fullname', $_SESSION['FullName']);
-        }
+        $view->assign('login_form', true);
         
-        // Include the handler - all normal processing happens here.
-        include($rq->handler);
+        $_SESSION['key'] = $auth->randomString(20);
+        $_SESSION['prev_query'] = $_SERVER['QUERY_STRING'];
 
-        // Set up the navigation menu.
-        if (empty($navbar)) {
-            $navbar = str_replace("class=\"$rq->action\"", 'class="navsel"', $_SESSION['MainNavList']);
-        }
-        $smarty->assign('navbar', $navbar);
-
-        // If the handler file does not set the $template variable,
-        // set to the default template as set in config.php.
-        $template = (empty($template)) ? $default_template : $template;
-
-        // Render the HTML via Smarty
-        ob_start();
-        $smarty->display($template);
-        $html = ob_get_contents();
-        ob_end_clean();
-        
-        // Attempt to Tidy the output.
-        if ($usetidy && class_exists('tidy')) {
-            $tidy = new tidy();
-            $tidy->parseString($html, array(
-                'hide-comments' => TRUE,
-                'output-xhtml' => TRUE,
-                'indent' => TRUE,
-                'wrap' => 0
-            ));
-            $tidy->cleanRepair();
-            echo tidy_get_output($tidy);
-        } else {
-            // Just dump it as is
-            echo $html;
-        }
+        $view->assign('key', $_SESSION['key']);
+        $view->assign('title', "$shortappname :: Login");
+        $view->assign('login_script', $auth->login_script);
 
     } else {
-        // Don't use the Smarty engine. e.g., when using Ajax to return a boolean
-        if ($rq_result) {
-            include($rq->handler);
-        }
+        // Set up the logout link
+        $view->assign('loggedin', true);
+        $view->assign('fullname', $_SESSION['FullName']);
     }
+    include($dispatch->handler);
+    $view->display();
 }
 ?>
