@@ -16,7 +16,7 @@ $shortappname = 'photon';
 
 // Defaults
 $default_action = 'home';
-$default_template = 'System/Templates/home.tpl';
+$default_template = 'System/Templates/home.html';
 
 // App key - should be a random string of Alphanumeric characters.
 $appkey = 'x2OpmMkHTay1';
