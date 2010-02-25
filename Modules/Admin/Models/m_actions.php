@@ -13,7 +13,8 @@ require('Modules/Admin/Models/m_base.php');
 
 class ActionModel extends BaseModel
 {
-
+	public $key;
+	
 	/**
      * __construct function initializes collection name
      * @access public
@@ -32,24 +33,17 @@ class ActionModel extends BaseModel
 	 */
 	public function add(){
 		$retval = false;
+		$this->keycondition = array('ActionName'=>$this->data['ActionName']);
 		if (empty($this->data)){
-			//Can't insert empty data!!!
-			
+			//Can't insert empty data!!!			
 			$retval = false;
 		}
-		else{
-			
+		else{			
 			//Set search condition		
 			$condition = array('ActionName'=>$this->data['ActionName']);
-			//Check if document exists
-			$check = $this->checkExists($condition);	
-			if ($check == false) {
-				unset($this->data['add']);
-	            $this->col->insert($this->data);
-	            $retval = true;
-			}
-		}
-		
+			//Add unique document if it is unique
+			$retval = $this->addUnique($condition);				
+		}		
 		return $retval;  		
 	}
 	

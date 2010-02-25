@@ -18,31 +18,17 @@ class BaseModel extends DBConn
 
 	public $data;		//Data to be inserted
 
-
-	
-	public function add(){
-		
-	}
-	
-	public function delete(){
-		
-	}
-	
-	public function update(){
-		
-	}
-
 	/*
-	 * checkExists function
-	 * Checks Mongo Collection for a document.
+	 * addUnique function - Inserts a document if key is unique
 	 * @access public
 	 * @return boolean
 	 */
-	public function checkExists($condition){
+	public function addUnique($condition){
 		$retval = true;
 		$exists = $this->col->findOne($condition);
 		if (empty($exists)) {
-			$retval = false;
+			unset($this->data['add']);
+	            $this->col->insert($this->data);
 		}
 		return $retval;
 	}
