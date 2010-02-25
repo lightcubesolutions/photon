@@ -11,7 +11,7 @@
 
 class View
 {
-    public $parse = true;
+    public $render = true;
     public $template;
     public $usetidy = false;
     public $fullhtml = true; // Should the opening and closing html, head, and body tags be rendered?
@@ -75,7 +75,7 @@ class View
      */
     function display()
     {
-        if ($this->parse) {
+        if ($this->render) {
             require('Library/Smarty/Smarty.class.php');
             $smarty = new Smarty;
             $smarty->template_dir = '.';
