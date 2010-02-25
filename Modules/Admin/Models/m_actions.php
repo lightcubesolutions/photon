@@ -9,7 +9,7 @@
  */
 require('Modules/Admin/Models/m_base.php');
 
-class ActionModel extends BaseModel
+class ActionsModel extends BaseModel
 {
 	
 	/**
@@ -17,18 +17,18 @@ class ActionModel extends BaseModel
      * @access public
      * @return void
      */
-	function __construct(){
+	function __construct()
+	{
 		parent::__construct();
-
-		$collection = "Actions";
-		$this->col = $this->db->$collection;		
+		$this->col = $this->db->Actions;		
 	}
 
 	/**
 	 * add function inserts data into MongoDB only if ActionName is unique
 	 * @return boolean
 	 */
-	public function add(){
+	public function add()
+	{
 		//Setup the criteria
 		$this->criteria = array('ActionName'=>$this->data['ActionName']);
 		parent::add();

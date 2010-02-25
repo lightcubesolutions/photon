@@ -12,7 +12,7 @@ defined("__photon") || die();
 $path = "Modules/Admin/Models/m_actions.php";
 require($path);
 
-$model = new ActionModel;
+$model = new ActionsModel;
 
 if(isset($_POST)) {
     $data = $_POST;

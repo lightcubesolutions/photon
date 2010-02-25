@@ -18,20 +18,26 @@ class BaseModel extends DBConn
 
 	public $data;		//Data to be inserted
 	public $criteria;	//Search criteria for find
+	public $error;		//Errors from MongoDB
 
 	/*
 	 * addUnique function - Inserts a document if key is unique
 	 * @access public
 	 * @return boolean
 	 */
-	public function addUnique(){
-		$retval = true;
+	public function addUnique()
+	{
 		$exists = $this->col->findOne($this->criteria);
 		if (empty($exists)) {
 			unset($this->data['add']);
+			try{
 	            $this->col->insert($this->data);
+			}
+			catch(MongoCursorException $e) {
+            	$db->error = $e;
+            	
+        	}
 		}
-		return $retval;
 	}
 	
 	/**
@@ -39,7 +45,8 @@ class BaseModel extends DBConn
 	 * Updates document in MongoDB based on _id
 	 * @return void
 	 */
-	public function update(){
+	public function update()
+	{
 		unset($this->data['update']);
 		$id = new MongoID($this->data['_id']);
 		unset($this->data['_id']);
@@ -51,7 +58,8 @@ class BaseModel extends DBConn
 	 * Removes document from MongoDB based on _id 
 	 * @return void
 	 */
-	public function delete(){
+	public function delete()
+	{
 		 $this->col->remove(array('_id'=>new MongoID($this->data['_id'])));
 	}
 	
@@ -59,7 +67,8 @@ class BaseModel extends DBConn
 	 * add function inserts data into MongoDB only if ActionName is unique
 	 * @return boolean
 	 */
-	public function add(){
+	public function add()
+	{
 		$retval = false;
 		if (empty($this->data)){
 			//Can't insert empty data!!!			
