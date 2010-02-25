@@ -21,6 +21,7 @@ class MongoDBHandler
     public $db;          // The actual DB object.
     public $grid; 		 // Grid object
     public $fileid; 	 // The mongoid of a stored file
+    public $col;
     
     private $_link;      // The link to the server.
     private $_connected; // Status of the server connection.
@@ -147,6 +148,23 @@ class MongoDBHandler
     	}
     	return $retval;
     }
+    function getDocuments($sort = array(), $where = array())
+    {
+        $retval = false;
+        // Only try if the connection has been established.
+        if ($this->_connected) {
+                                    
+            // Grab the data
+            $this->cursor = $this->col->find($where);
+
+            if ($this->cursor->count() > 0) {
+                $retval = true;
+                $this->cursor->sort($sort);
+            }
+        }
+        return $retval;
+    }
+    
 }
 
 ?>
