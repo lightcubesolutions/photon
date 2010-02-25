@@ -1,6 +1,6 @@
 <?php
 /**
- * MongoHandler Class
+ * MongoDBHandler Class
  * Manages all MongoDB  transactions. Collects returned data into easily
  * accessible arrays and reports all errors.
  *
@@ -10,7 +10,7 @@
  * @license http://www.lightcubesolutions.com/LICENSE
  */
 
-class MongoHandler
+class MongoDBHandler
 {
     protected $dbname;   // The database name
     protected $dbuser;   // The database user name

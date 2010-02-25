@@ -21,7 +21,7 @@ class Authentication
     // Set the session timeout to 30 minutes.
     private $_timeout = 1800;
     
-    const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890123456789";
+    const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890123456789';
 
     /**
      * login function.

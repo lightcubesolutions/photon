@@ -6,7 +6,7 @@
  * @version 1.0
  * @author LightCube Solutions <info@lightcubesolutions.com>
  * @copyright LightCube Solutions, LLC. 2010
- * @license FIXME: Determine license
+ * @license http://www.lightcubesolutions.com/LICENSE
  */
 
 // Include site configuration.
@@ -24,6 +24,9 @@ $view = new View;
 
 // Set the use tidy option.
 $view->usetidy = $usetidy;
+
+// Set the theme.
+$view->theme = $theme;
 
 // Start the PHP session
 session_name($appkey);
@@ -43,7 +46,7 @@ $dispatch->parse($_REQUEST);
 
 // No action found in the DB. Just use the default as set in config.php
 if ($dispatch->status === false) {
-    $dispatch->parse(array('a'=>$default_action));
+    $dispatch->handler = 'Modules/Home/Controllers/c_home.php';
 }
 
 if (!empty($dispatch->special)) {
