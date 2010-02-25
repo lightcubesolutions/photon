@@ -2,11 +2,11 @@
 require('Smarty/Smarty.class.php');
 
 /**
- * MySmarty Class - Provide configuration settings for Smarty
+ * View Class
  *
  * @extends Smarty
  */
-class MySmarty extends Smarty
+class View extends Smarty
 {
    function __construct()
    {
