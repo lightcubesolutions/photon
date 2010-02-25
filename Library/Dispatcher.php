@@ -14,7 +14,6 @@ class Dispatcher
 {
 
     public $controller;         // The main PHP file which performs the logic behind an action
-    public $smarty = true;      // Use the Smarty Template Engine?
     public $special;            // Is this a special, internal action?
     public $action;             //
     public $status;
@@ -43,8 +42,7 @@ class Dispatcher
  
     /**
      * parse function. Determines if a configured action exists from the client's
-     * request and loads the handler and smarty data fields with the appropriate
-     * values if so
+     * request and assigns the controller property with the appropriate value if so.
      * 
      * @access public
      * @param mixed $request
@@ -75,16 +73,16 @@ class Dispatcher
                 foreach ($this->_access as $action) {                    
                     if ($action['ActionName'] == $user_request) {
                          $this->action  = $action['ActionName'];
-                         $this->smarty  = $action['IsSmarty'];
-                         $this->handler = $action['Handler'];
+                         
+                         // FIXME: should be controller.
+                         $this->controller = "Modules/$action[Module]/Controllers/$action[Controller]";
                          $access = true;
                          $this->status = true;
                          break;
                     }
                 }
                 if (!$access) {
-                     $this->smarty = true;
-                     $this->handler = 'error.php';
+                     $this->controller = 'error.php';
                 }
                 break;
         }

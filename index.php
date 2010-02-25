@@ -46,7 +46,7 @@ $dispatch->parse($_REQUEST);
 
 // No action found in the DB. Just use the default as set in config.php
 if ($dispatch->status === false) {
-    $dispatch->handler = 'Modules/Home/Controllers/c_home.php';
+    $dispatch->controller = 'Modules/Home/Controllers/c_home.php';
 }
 
 if (!empty($dispatch->special)) {
@@ -104,7 +104,7 @@ if (!empty($dispatch->special)) {
         $view->assign('loggedin', true);
         $view->assign('fullname', $_SESSION['FullName']);
     }
-    include($dispatch->handler);
+    include($dispatch->controller);
     $view->display();
 }
 ?>

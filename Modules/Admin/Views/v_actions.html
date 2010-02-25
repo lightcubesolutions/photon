@@ -16,12 +16,14 @@
 	        <table>
 	            <tr>
 			        <td><label>Action Name</label></td>
-			        <td><label>Action Controller</label></td>
+			        <td><label>Module</label></td>
+			        <td><label>Module</label></td>
 	                <td><label>Enabled</label></td>
 			    </tr>
 			    <tr>
 			    	<td><input type="text" name="ActionName" value="" /></td>
-			    	<td><input type="text" name="Controller" value="" /></td>
+                    <td><input type="text" name="Module" value="" /></td>
+                    <td><input type="text" name="Controller" value="" /></td>
 			    	<td><input type="checkbox" name="IsEnabled" /></td>
 			    </tr>
 			    <tr>
@@ -35,24 +37,12 @@
 	</div>
 	<div style="margin-top: 10px;">
         <h3>All Actions</h3>
-		{literal}
-	    <script type="text/javascript">
-	    $(document).ready(function(){
-	        $("#results").dataTable({
-		        "bJQueryUI": true,
-	            "sPaginationType": "full_numbers",
-	            "bAutoWidth": false,
-	            "bSortClasses": false
-	        });
-	    });
-		</script>
-		{/literal}
-		
 		<div id='qresults'>
 			<table id='results'>
 				<thead>
 				  <tr>
-					<th>Action</th>
+					<th>Action Name</th>
+					<th>Module</th>
 					<th>Controller</th>
                     <th>Description</th>
 					<th>Enabled</th>
@@ -64,6 +54,7 @@
 					<tr class='actioninfo' id='actioninfo_{$row.ActionName}'>
 					   <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
 						<td><input type='text' name='ActionName' value='{$row.ActionName}' /></td>
+                        <td><input type='text' name='Module' value='{$row.Module}' /></td>
                         <td><input type='text' name='Controller' value='{$row.Controller}' /></td>
                         <td><input type='text' name='Description' value='{$row.Description}' /></td>
 						<td><input type='checkbox' name='IsEnabled' {if $row.IsEnabled == 1} checked="checked" {/if} /></td>
