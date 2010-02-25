@@ -190,7 +190,8 @@ hr { display: none; }
 /** LOGO */
 
 #logo {
-	width: 960px;
+	width: 950px;
+	padding-left: 10px;
 	height: 94px;
 	margin: 0 auto;
 }
@@ -204,7 +205,7 @@ hr { display: none; }
 }
 
 #logo p {
-	margin-top: -4px;
+	margin-top: -10px;
 	text-transform: lowercase;
 	font-size: 13px;
 	color: #639CBF;
