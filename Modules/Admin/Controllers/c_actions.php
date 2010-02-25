@@ -1,6 +1,6 @@
 <?php
 /**
- * actionsadmin.php - Manage actions
+ * c_actions.php - Controller to manage actions
  *
  * @package RBC Project
  * @version 1.0
@@ -18,7 +18,6 @@ if(isset($_POST)) {
     $data = $_POST;
     // Swap out values...
     $data['IsEnabled'] = ($data['IsEnabled'] == 'on') ? '1' : '0';
-    $data['IsSmarty'] = ($data['IsSmarty'] == 'on') ? '1' : '0';
     $model->data = $data;
 
     if (isset($_POST['add'])) { 

@@ -70,7 +70,8 @@ class ActionModel extends BaseModel
 	public function update(){
 		unset($this->data['update']);
 		$id = new MongoID($this->data['_id']);
-		$this->col->update(array('_id'=>$id), array('$set'=>$this->data));
+		unset($this->data['_id']);
+		$this->col->update(array('_id'=>$id), array('$set'=>$this->data));		
 	}
 		
 }
