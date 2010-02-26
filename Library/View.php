@@ -124,6 +124,7 @@ class View
                 $this->_head .= "<head>\n";
                 $html = $this->_head;
                 
+                // FIXME: Turn the below into a function.
                 if (file_exists("Themes/$this->theme/header.html")) {
                     ob_start();
                     $smarty->template_dir = "Themes/$this->theme";
