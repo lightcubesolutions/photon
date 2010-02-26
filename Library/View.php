@@ -127,6 +127,10 @@ class View
                 if (file_exists("Themes/$this->theme/header.html")) {
                     ob_start();
                     $smarty->template_dir = "Themes/$this->theme";
+                    $smarty->compile_dir = "Themes/$this->theme/.compiled";
+                    if (!file_exists($smarty->compile_dir)) {
+                        mkdir($smarty->compile_dir, 0770);
+                    }
                     $smarty->display('header.html');
                     $html .= ob_get_contents();
                     ob_end_clean();
@@ -137,6 +141,10 @@ class View
                 if (file_exists("Themes/$this->theme/footer.html")) {
                     ob_start();
                     $smarty->template_dir = "Themes/$this->theme";
+                    $smarty->compile_dir = "Themes/$this->theme/.compiled";
+                    if (!file_exists($smarty->compile_dir)) {
+                        mkdir($smarty->compile_dir, 0770);
+                    }
                     $smarty->display('footer.html');
                     $html .= ob_get_contents();
                     ob_end_clean();
