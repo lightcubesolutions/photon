@@ -52,8 +52,9 @@ class Authentication
     function setSessionInfo($user)
     {
         $db = new DBConn;
-        if ($db->getData('Users', '', array('LoginName'=>$user))) {
-            $data = $db->cursor->getNext();
+        $col = $db->db->ActiveSessions;
+        $data = $col->findOne(array('LoginName'=>$user));
+        if (!empty($data)) {
             $_SESSION['LoginName']   = $data['LoginName'];
             $_SESSION['FirstName']   = ucwords(strtolower($data['FirstName']));
             $_SESSION['LastName']    = ucwords(strtolower($data['LastName']));
@@ -74,9 +75,9 @@ class Authentication
         $timestamp = $dt->format('U');
         $id = session_id();
         $db = new DBConn;
-
-        if ($db->getData('ActiveSessions', '', array('SessionID'=>$id))) {
-            $data = $db->cursor->getNext();
+        $col = $db->db->ActiveSessions;
+        $data = $col->findOne(array('SessionID'=>$id));
+        if (!empty($data)) {
             if ($data['IP'] == ip2long($_SERVER['REMOTE_ADDR'])) {
                 // Session has already been recorded & the IP address matches
                 // Just make sure the key exists and the session hasn't expired. 
@@ -140,8 +141,9 @@ class Authentication
     {
         $retval = false;
         $db = new DBConn;
-        if ($db->getData('Users', '', array('LoginName'=>"$user", 'IsEnabled'=>1))) {
-            $row = $db->cursor->getNext();
+        $col = $db->db->ActiveSessions;
+        $row = $col->findOne(array('LoginName'=>"$user", 'IsEnabled'=>1));
+        if (!empty($row)) {
             $retval = $row['Password'];
         }
         return $retval;

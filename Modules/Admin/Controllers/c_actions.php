@@ -9,8 +9,8 @@
  */
 
 defined("__photon") || die();
-$path = "Modules/Admin/Models/m_actions.php";
-require($path);
+
+require_once('Modules/Admin/Models/m_actions.php');
 
 $model = new ActionsModel;
 
@@ -22,12 +22,10 @@ if(isset($_POST)) {
 
     if (isset($_POST['add'])) { 
     	$check = $model->add();   
-        if (empty($check)) {                    
-            $view->assign('statusclass','statusok');
-            $view->assign('status','Successfully added '.$data['ActionName']);
+        if (empty($check)) {
+            // No error
         } else {
-            $view->assign('statusclass','statuserror');
-            $view->assign('status','Duplicate entry for '.$data['ActionName']);
+            // Error
         }
     } elseif (isset($_POST['update'])) {
 		$model->update();

@@ -1,6 +1,6 @@
 <?php
 /**
- * m_actions.php - Action Model Class
+ * m_users.php - Users Model Class
  * 
  * @package photon 
  * @version 1.0-a
@@ -8,28 +8,29 @@
  * @copyright LightCube Solutions, LLC. 2010
  */
 
-class ActionsModel extends Model
+class UsersModel extends Model
 {
 	/**
      * __construct function initializes collection name
      * @access public
      * @return void
      */
-	public function __construct()
+	function __construct()
 	{
 		parent::__construct();
-		$this->col = $this->db->Actions;		
+		$this->col = $this->db->Users;		
 	}
 
-    /**
-     * @see Library/Model#add()
-     */
-	public function add()
+	/**
+	 * add function inserts data into MongoDB only if ActionName is unique
+	 * @return boolean
+	 */
+	function add()
 	{
 		//Setup the criteria
-		$this->criteria = array('ActionName'=>$this->data['ActionName']);
+		$this->criteria = array('LoginName'=>$this->data['LoginName']);
 		parent::add();
-		
 	}
 }
+
 ?>

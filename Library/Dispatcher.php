@@ -25,15 +25,12 @@ class Dispatcher
      * @return void
      */
     private function _setAccess($loginname)
-    {
-    	//Set find parameters to enabled actions
-    	$where = array("IsEnabled"=>"1");
-    	
+    {  	
         $db = new DBConn;
+        $col = $db->db->Actions;
     	//Get data from Actions collection
-        $db->getData('Actions', $sort = array(), $where);
-        //Get Cursor
-        $cur = $db->cursor;
+        $cur = $col->find(array("IsEnabled"=>"1"));
+
         //Loop through actions
         foreach ($cur as $obj){
         	$this->_access[] = $obj;

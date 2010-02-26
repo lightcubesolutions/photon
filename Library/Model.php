@@ -1,6 +1,6 @@
 <?php
 /**
- * m_base.php - Base Model Class
+ * Model.php - Base Model Class
  * The base file contains the basic strcuture of all Models.
  * All methods contained in this class should be useable by multiple models
  * 
@@ -9,35 +9,27 @@
  * @author LightCube Solutions <info@lightcubesolutions.com>
  * @copyright LightCube Solutions, LLC. 2010
  */
-defined("__photon") || die();
 
-
-
-class BaseModel extends DBConn
+class Model extends DBConn
 {
 
 	public $data;		//Data to be inserted
 	public $criteria;	//Search criteria for find
-	public $error;		//Errors from MongoDB
 
-	/*
+	/**
 	 * addUnique function - Inserts a document if key is unique
 	 * @access public
 	 * @return boolean
 	 */
 	public function addUnique()
 	{
+		$retval = true;
 		$exists = $this->col->findOne($this->criteria);
 		if (empty($exists)) {
 			unset($this->data['add']);
-			try{
 	            $this->col->insert($this->data);
-			}
-			catch(MongoCursorException $e) {
-            	$db->error = $e;
-            	
-        	}
 		}
+		return $retval;
 	}
 	
 	/**
@@ -63,10 +55,12 @@ class BaseModel extends DBConn
 		 $this->col->remove(array('_id'=>new MongoID($this->data['_id'])));
 	}
 	
-	/**
-	 * add function inserts data into MongoDB only if ActionName is unique
-	 * @return boolean
-	 */
+    /**
+     * add function
+     * inserts data into MongoDB only if ActionName is unique
+     * 
+     * @return unknown_type
+     */
 	public function add()
 	{
 		$retval = false;

@@ -69,7 +69,6 @@ class MongoDBHandler
      * getData function.
      * Return all data from a collection with optional sorting and filtering
      * 
-     * @param string $collection
      * @param array $sort
      * @param array $where
      * @return boolean

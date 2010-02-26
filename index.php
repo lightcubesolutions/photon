@@ -16,6 +16,7 @@ require('config.php');
 require('Library/Dispatcher.php');
 require('Library/Authentication.php');
 require('Library/View.php');
+require('Library/Model.php');
 
 // Instantiate new global instances of classes we will reuse.
 $dispatch = new Dispatcher;
@@ -33,7 +34,7 @@ session_name($appkey);
 session_start();
 
 // Defined constant to prevent subfiles from being accessed directly.
-define("__photon", true);
+define('__photon', true);
 
 // Set default TimeZone
 date_default_timezone_set($tz);
