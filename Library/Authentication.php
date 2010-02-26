@@ -6,7 +6,7 @@
  * @version 1.0
  * @author LightCube Solutions <info@lightcubesolutions.com>
  * @copyright LightCube Solutions, LLC. 2010
- * @license 
+ * @license http://www.lightcubesolutions.com/LICENSE
  */
  
 class Authentication
