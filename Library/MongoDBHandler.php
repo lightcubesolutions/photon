@@ -71,16 +71,13 @@ class MongoDBHandler
     }
     
     /**
-     * getData function.
-     * Return all data from a collection with optional sorting and filtering
-     * 
+     * getData function - Return array of collection documents with optional sorting and filtering
      * @param array $sort
      * @param array $where
-     * @return boolean
+     * @return array
      */
     function getData($sort = array(), $where = array())
     {
-        $retval = false;
         // Only try if the connection has been established.
         if ($this->_connected) {
                                     
@@ -88,11 +85,13 @@ class MongoDBHandler
             $this->cursor = $this->col->find($where);
 
             if ($this->cursor->count() > 0) {
-                $retval = true;
                 $this->cursor->sort($sort);
+            	foreach($this->cursor as $obj){
+					$retarray[] = $obj;
+				}
             }
         }
-        return $retval;
+        return $retarray;
     }
     
     /**

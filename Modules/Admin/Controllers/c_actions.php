@@ -34,13 +34,7 @@ if(isset($_POST)) {
     }
 }
 
-$model->getData();
-$cur = $model->cursor;
-foreach($cur as $obj){
-    $obj['_id'] = $obj["_id"];
-	$actions[] = $obj;
-}
-
+$actions = $model->getData();
 
 $view->template = 'Modules/Admin/Views/v_actions.html';
 $view->assign('thisaction', "$_SERVER[QUERY_STRING]");
