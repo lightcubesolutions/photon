@@ -12,7 +12,7 @@
 // Include site configuration.
 require('config.php');
 
-// Include other necessary Libraries
+// Include necessary Libraries
 require('Library/MongoDBHandler.php');
 require('Library/Dispatcher.php');
 require('Library/Authentication.php');
