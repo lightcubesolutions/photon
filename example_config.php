@@ -20,13 +20,8 @@ $tz = 'America/New_York';
 $usetidy = false;
 
 // DB connection params
-// FIXME: find a more elegant way to do the below.
-require_once('Library/MongoDBHandler.php');
-class DBConn extends MongoDBHandler
-{
-    protected $dbname  = 'changeme';
-    protected $dbuser  = 'changeme';
-    protected $dbpass  = 'changeme';
-}
+$dbname  = 'changeme';
+$dbuser  = 'changeme';
+$dbpass  = 'changeme';
 
 ?>

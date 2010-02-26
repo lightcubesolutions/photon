@@ -16,7 +16,7 @@ $template = 'System/Templates/getpvalues.tpl';
 /// Returns a list of possible values for this object based on what is in the table
 function getValues($key_name, $collection){
 	$retval = false;
-    $db = new DBConn;
+    $db = new MongoDBHandler;
     $result = $db->db->command(array('distinct' => $collection, 'key' => $key_name));
     foreach($result['values'] as $val) {
         if ($val !== null)
@@ -28,7 +28,7 @@ function getValues($key_name, $collection){
 	return $retval;
 }
 
-$db = new DBConn;
+$db = new MongoDBHandler;
 
 if ($db->getData('UserFilters', '', array('id'=>$param))) {
 	$row = $db->cursor->getNext();

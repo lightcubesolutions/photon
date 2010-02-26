@@ -14,7 +14,7 @@ defined("_CFEXEC") || die();
 $options[] = array('id'=>'', 'param_name'=>'...');
 
 // Pull the actual parameters
-$db = new DBConn;
+$db = new MongoDBHandler;
 $db->getData('UserFilters', array('param_name'=>1));
 foreach ($db->cursor as $obj) {
     $options[] = $obj;

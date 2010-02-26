@@ -10,7 +10,7 @@
  * @copyright LightCube Solutions, LLC. 2010
  */
 
-class Model extends DBConn
+class Model extends MongoDBHandler
 {
 
 	public $data;		//Data to be inserted

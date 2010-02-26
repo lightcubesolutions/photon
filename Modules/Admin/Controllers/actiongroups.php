@@ -10,7 +10,7 @@
 
 defined("_CFEXEC") || die();
 
-$db = new DBConn;
+$db = new MongoDBHandler;
 
 if(isset($_POST)) {
 

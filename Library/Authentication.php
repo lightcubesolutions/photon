@@ -51,7 +51,7 @@ class Authentication
      */
     function setSessionInfo($user)
     {
-        $db = new DBConn;
+        $db = new MongoDBHandler;
         $col = $db->db->ActiveSessions;
         $data = $col->findOne(array('LoginName'=>$user));
         if (!empty($data)) {
@@ -74,7 +74,7 @@ class Authentication
         $dt = new DateTime;
         $timestamp = $dt->format('U');
         $id = session_id();
-        $db = new DBConn;
+        $db = new MongoDBHandler;
         $col = $db->db->ActiveSessions;
         $data = $col->findOne(array('SessionID'=>$id));
         if (!empty($data)) {
@@ -108,7 +108,7 @@ class Authentication
     function resetSession()
     {
         $id = session_id();
-        $db = new DBConn;
+        $db = new MongoDBHandler;
         $this->login_form = true;
         $col = $db->db->ActiveSessions;
         $col->remove(array('SessionID'=>$id));
@@ -140,7 +140,7 @@ class Authentication
     function getPassword($user)
     {
         $retval = false;
-        $db = new DBConn;
+        $db = new MongoDBHandler;
         $col = $db->db->ActiveSessions;
         $row = $col->findOne(array('LoginName'=>"$user", 'IsEnabled'=>1));
         if (!empty($row)) {
@@ -160,7 +160,7 @@ class Authentication
     {
         $retval = false;
         $id = session_id();
-        $db = new DBConn;
+        $db = new MongoDBHandler;
         $col = $db->db->ActiveSessions;
         try {
             $col->insert(array('SessionID'=>$id, 'IP'=>ip2long($_SERVER['REMOTE_ADDR'])), true);

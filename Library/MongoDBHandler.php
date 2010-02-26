@@ -35,6 +35,11 @@ class MongoDBHandler
      */
     function __construct()
     {
+        global $dbname, $dbuser, $dbpass;
+        $this->dbname = $dbname;
+        $this->dbuser = $dbuser;
+        $this->dbpass = $dbpass;
+        
         // Make the initial connection
         // FIXME: could probably allow for all the PHP options, here, like server URL, etc
         $this->_link = new Mongo();

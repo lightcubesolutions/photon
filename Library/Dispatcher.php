@@ -26,7 +26,7 @@ class Dispatcher
      */
     private function _setAccess($loginname)
     {  	
-        $db = new DBConn;
+        $db = new MongoDBHandler;
         $col = $db->db->Actions;
     	//Get data from Actions collection
         $cur = $col->find(array("IsEnabled"=>"1"));

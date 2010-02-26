@@ -15,7 +15,7 @@ $template = 'System/Templates/userinfo.tpl';
 $req = str_replace("'", '', $_REQUEST);
 $user = str_replace('userinfo_', '', $_REQUEST['user']);
 
-$db = new DBConn;
+$db = new MongoDBHandler;
 $userdata = $db->db->Users->findOne(array('LoginName'=>$user));
 ob_start();
 var_dump($userdata);

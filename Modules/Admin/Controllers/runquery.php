@@ -12,7 +12,7 @@ defined("_CFEXEC") || die();
 
 $id = NULL;
 $template = 'System/Templates/runquery.tpl';
-$db = new DBConn;
+$db = new MongoDBHandler;
 $dir = dirname($_SERVER["SCRIPT_FILENAME"]);
 
 $req = str_replace("'", '', $_REQUEST);
@@ -83,7 +83,7 @@ if (!empty($compare)) {
 
 if (!empty($filters)) {
 
-    $db = new DBConn;
+    $db = new MongoDBHandler;
     
 	if ($db->getData('Users', '', $filters)) {
 		$num = $db->cursor->count();
