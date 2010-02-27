@@ -43,7 +43,7 @@ date_default_timezone_set($tz);
 // Make sure the Session isn't expired or the recorded IP is invalid
 $auth->checkSession();
 
-// Parse the Query Parameters given, which is in the $_REQUEST array
+// Parse the $_REQUEST array, look for the action
 $dispatch->parse($_REQUEST);
 
 if ($dispatch->status === false) {
@@ -96,9 +96,9 @@ if (!empty($dispatch->special)) {
         $_SESSION['prev_query'] = $_SERVER['QUERY_STRING'];
         
         $view->assign('key', $_SESSION['key']);
-        $view->register('js', 'Media/JavaScript/sha1.js');
-        $view->register('js', 'Media/JavaScript/ajax_functions.js');
-        $view->register('js', 'Media/JavaScript/login.js');
+        $view->register('js', 'sha1.js');
+        $view->register('js', 'ajax_functions.js');
+        $view->register('js', 'login.js');
         
     } else {
         // Set up the logout link
