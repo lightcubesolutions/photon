@@ -10,7 +10,7 @@
 
 defined("__photon") || die();
 
-require_once('Modules/Admin/Models/m_actions.php');
+require_once('Modules/DevTools/Models/m_actions.php');
 
 $model = new ActionsModel;
 
@@ -36,7 +36,7 @@ if(isset($_POST)) {
 
 $actions = $model->getData();
 
-$view->template = 'Modules/Admin/Views/v_actions.html';
+$view->template = 'Modules/DevTools/Views/v_actions.html';
 $view->assign('thisaction', "$_SERVER[QUERY_STRING]");
 $view->assign('actions', $actions);
 $view->pagetitle = "$shortappname :: Actions Administrator";
