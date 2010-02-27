@@ -16,7 +16,6 @@ body {
 
 h1, h2, h3 {
 	margin: 0;
-	text-transform: uppercase;
 	font-family: "Trebuchet MS", Georgia, "Times New Roman", Times, serif;
 	font-weight: normal;
 	color: #4B8749;
@@ -195,23 +194,25 @@ hr { display: none; }
 	width: 960px;
 	height: 170px;
 	margin: 0 auto;
+	font-family: 'Trebuchet MS', Arial, sans-serif;
 }
 
 #logo h1, #logo p {
 	margin: 0px;
 	line-height: normal;
-	font-weight: normal;
-	color: #FFFFFF;
 }
 
 #logo p {
-	text-transform: uppercase;
-	font-size: 10px;
+	font-size: 13px;
+	color: #639CBF;
+	font-weight: bold;
 }
 
 #logo h1 {
 	padding-top: 80px;
-	font-size: 34px;
+	font-size: 48px;
+	color: #FFFFFF;
+	font-weight: normal;
 }
 
 #logo a {
