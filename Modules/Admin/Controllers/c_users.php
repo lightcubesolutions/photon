@@ -14,6 +14,10 @@ $model = new UsersModel;
 
 if(!empty($_POST)) {
     $data = $_POST;
+    
+    require('Library/UITools.php');
+    $ui = new UITools;
+    
     // Swap out values...
     $data['IsEnabled'] = ($data['IsEnabled'] == 'on') ? '1' : '0';
         
@@ -26,16 +30,17 @@ if(!empty($_POST)) {
     $model->data = $data;
         
     if (isset($_POST['add'])) {
-        $check = $model->add();   
-        if (empty($check)) {
-       
+        if ($model->add()) {
+           $ui->statusMsg('Successfully added the new user: '.$data['Username']);
         } else {
-
+           $ui->statusMsg($model->error, 'error');
         }    
     } elseif (isset($_POST['update'])) {
         $model->update();
+        $ui->statusMsg("Successfully updated the user: $data[Username]");
     } elseif (isset($_POST['del'])) {
         $model->delete();
+        $ui->statusMsg("Successfully deleted the user: $data[Username]");
     }
 }
 

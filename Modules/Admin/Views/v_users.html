@@ -1,5 +1,5 @@
 <div>
-	<h3><a href="#">Add a New User</a></h3>
+	<h3>Add a New User</h3>
 	<div>
 	    <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
 	        <table>
@@ -26,12 +26,13 @@
 				<th>Username</th>
 				<th>First Name</th>
 				<th>Last Name</th>
+				<th>Enabled</th>
 				<th></th>
 			  </tr>
 			</thead>
 			<tbody>
                 {foreach from=$users item="row" key=k  name="row"}
-				<tr class='actioninfo' id='actioninfo_{$row.UserName}'>
+				<tr>
 				   <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
 					<td><input type='text' name='Username' value='{$row.Username}' /></td>
                        <td><input type='text' name='FirstName' value='{$row.FirstName}' /></td>

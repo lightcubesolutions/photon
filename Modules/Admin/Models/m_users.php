@@ -22,14 +22,14 @@ class UsersModel extends Model
 	}
 
 	/**
-	 * add function inserts data into MongoDB only if ActionName is unique
+	 * add function inserts data into MongoDB only if Username is unique
 	 * @return boolean
 	 */
 	function add()
 	{
 		//Setup the criteria
 		$this->criteria = array('Username'=>$this->data['Username']);
-		parent::add();
+		return parent::add();
 	}
 }
 
