@@ -7,7 +7,13 @@
     processed by the Smarty template engine, so Smarty
     logic can be used here.
  -->
- 
+	<div id="loginwrapper">
+	{if $loggedin}
+	    {include file='logout.html'}
+	{else}
+	    {include file='login.html'}
+	{/if}
+ 	</div>
     <div id="logo">
         <h1><em><a href="?a=home">photon</a></em></h1>
         <p style="padding-left: 10px;"><em>an application framework for PHP and MongoDB</em></p>

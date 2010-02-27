@@ -74,6 +74,28 @@ hr { display: none; }
 }
 
 #wrapper {
+	position: relative;
+	width: 1000px;
+	margin: 0 auto;
+}
+
+#loginwrapper {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+#loginwrapper ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#loginwrapper ul li {
+	display: inline;
+	vertical-align: middle;
+	color: #ffffff;
+	padding-left: 5px;
 }
 
 /* Header */
@@ -417,3 +439,6 @@ hr { display: none; }
 #footer a {
 	color: #000000;
 }
+
+.error { color: red; }
+

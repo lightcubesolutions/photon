@@ -8,7 +8,13 @@
     logic can be used here.
  -->
  <div id="wrapper">
- 
+	<div id="loginwrapper">
+	{if $loggedin}
+	    {include file='logout.html'}
+	{else}
+	    {include file='login.html'}
+	{/if}
+ 	</div>
     <div id="logo">
         <h1><em><a href="?a=home">photon</a></em></h1>
         <p style="padding-left: 10px;"><em>an application framework for PHP and MongoDB</em></p>
@@ -17,9 +23,8 @@
 		<div id="menu">
 			<ul>
 				<li><a href="?a=home" class="first">Home</a></li>
-				<li><a href="#">Link 1</a></li>
-				<li><a href="#">Link 2</a></li>
-				<li><a href="#">Link 3</a></li>
+				<li><a href="?a=actions">Actions</a></li>
+				<li><a href="?a=users">Users</a></li>
 			</ul>
 		</div>
 	</div>

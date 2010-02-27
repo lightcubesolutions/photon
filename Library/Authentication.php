@@ -11,10 +11,6 @@
  
 class Authentication
 {
-
-    // A JavaScript function which is embedded in the HTML header.
-    public $login_script = '<script type="text/javascript" src="JavaScript/login.js"></script>';
-
     public $hash;
     public $login_form = true;
 
@@ -52,10 +48,10 @@ class Authentication
     function setSessionInfo($user)
     {
         $db = new MongoDBHandler;
-        $col = $db->db->ActiveSessions;
-        $data = $col->findOne(array('LoginName'=>$user));
+        $col = $db->db->Users;
+        $data = $col->findOne(array('Username'=>$user));
         if (!empty($data)) {
-            $_SESSION['LoginName']   = $data['LoginName'];
+            $_SESSION['Username']    = $data['Username'];
             $_SESSION['FirstName']   = ucwords(strtolower($data['FirstName']));
             $_SESSION['LastName']    = ucwords(strtolower($data['LastName']));
             $_SESSION['FullName']    = "$_SESSION[FirstName] $_SESSION[LastName]";
@@ -141,8 +137,8 @@ class Authentication
     {
         $retval = false;
         $db = new MongoDBHandler;
-        $col = $db->db->ActiveSessions;
-        $row = $col->findOne(array('LoginName'=>"$user", 'IsEnabled'=>1));
+        $col = $db->db->Users;
+        $row = $col->findOne(array('Username'=>"$user", 'IsEnabled'=>'1'));
         if (!empty($row)) {
             $retval = $row['Password'];
         }

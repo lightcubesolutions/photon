@@ -58,12 +58,12 @@ class View
             case 'js':
             case 'javascript':
             case 'script':
-                $this->media['js'][] = '';
+                $this->media['js'][] = $path;
                 break;
 
             case 'css':
             default:
-                $this->media['css'][] = '';
+                $this->media['css'][] = $path;
                 break;
        } 
     }
@@ -121,7 +121,7 @@ class View
                 }
                 
                 $this->_head .= "<title>$this->pagetitle</title>\n";
-                $this->_head .= "<head>\n";
+                $this->_head .= "</head>\n";
                 $html = $this->_head;
                 
                 // FIXME: Turn the below into a function.

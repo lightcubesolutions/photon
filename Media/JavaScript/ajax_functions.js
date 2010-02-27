@@ -103,7 +103,7 @@ function newModal (msg)
     i.style.left = l + 'px';
     i.style.backgroundColor = '#000000';
     i.style.zIndex = '100001';
-    i.src='Images/ajax-loader.gif';
+    i.src='Media/Images/ajax-loader.gif';
     var d = document.createElement('div');
     d.id = 'cfmodal';
     d.style.position = 'fixed';

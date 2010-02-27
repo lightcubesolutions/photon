@@ -46,8 +46,8 @@ $auth->checkSession();
 // Parse the Query Parameters given, which is in the $_REQUEST array
 $dispatch->parse($_REQUEST);
 
-// No action found in the DB. Just use the default as set in config.php
 if ($dispatch->status === false) {
+    // No matching action found in the DB. Just use the default 
     $dispatch->controller = 'Modules/Home/Controllers/c_home.php';
 }
 
@@ -91,16 +91,15 @@ if (!empty($dispatch->special)) {
 } else {
     // Set up the Login form if we need to.
     if ($auth->login_form) {
-
-        $view->assign('login_form', true);
         
         $_SESSION['key'] = $auth->randomString(20);
         $_SESSION['prev_query'] = $_SERVER['QUERY_STRING'];
-
+        
         $view->assign('key', $_SESSION['key']);
-        $view->assign('title', "$shortappname :: Login");
-        $view->assign('login_script', $auth->login_script);
-
+        $view->register('js', 'Media/JavaScript/sha1.js');
+        $view->register('js', 'Media/JavaScript/ajax_functions.js');
+        $view->register('js', 'Media/JavaScript/login.js');
+        
     } else {
         // Set up the logout link
         $view->assign('loggedin', true);
