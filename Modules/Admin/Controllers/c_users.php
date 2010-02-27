@@ -39,8 +39,10 @@ if(!empty($_POST)) {
     }
 }
 
+$users = $model->getData();
+
 $view->template = 'Modules/Admin/Views/v_users.html';
 $view->assign('thisaction', "$_SERVER[QUERY_STRING]");
-$view->assign('actions', $actions);
+$view->assign('users', $users);
 $view->pagetitle = "$shortappname :: Users Administrator";
 ?>

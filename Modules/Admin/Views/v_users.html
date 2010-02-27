@@ -1,10 +1,10 @@
-<div class="accordion" style="margin: 10px 0;">
+<div>
 	<h3><a href="#">Add a New User</a></h3>
 	<div>
 	    <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
 	        <table>
 	            <tr>
-			        <td><label>Login Name</label><br /><input type="text" name="LoginName" value="" /></td>
+			        <td><label>Username</label><br /><input type="text" name="Username" value="" /></td>
 			        <td><label>First Name</label><br /><input type="text" name="FirstName" value="" /></td>
 	                <td><label>Last Name</label><br /><input type="text" name="LastName" value="" /></td>
 	                <td><label>Password</label><br /><input type="password" name="Password" value="" /></td>
@@ -18,41 +18,34 @@
 	        </p>
 	    </form>
 	</div>
-	<h3><a href="#">Find Users</a></h3>
-	<div>
-		<form id="filterform" action="javascript:verifyQueryData();" method="get">
-		    <div><input id="tableName" type="hidden" value="test" /></div>
-		    <fieldset class="filter" id="filter">
-		        <legend>Add a Search Parameter:
-		            <select id="filter_types" onChange="buildFilter(this.options[this.selectedIndex].value, this)">
-		                <option></option>
-		            </select>
-		        </legend>
-		        <div id="filterfield">
-		            <div id="current_filters"></div>
-		            <div id="filter_search">
-		                <p>
-		                  <input id="filter_button" class='input_button' type="button" value="Search" onclick="verifyQueryData();" />
-		                  <span id="status"></span>
-		                </p>
-		            </div>
-		        </div>
-		    </fieldset>
-		</form>
-		{literal}
-		<script type="text/javascript">
-		    var div = document.getElementById("current_filters");
-		    var button = document.getElementById("filter_button");
-		    var tbl = document.getElementById('tableName');
-		    if (div.childNodes.length == 0) {
-		        button.disabled = true;
-		    }
-		    if (tbl.type == "hidden") {
-		        loadAction('?a=setparams', 'filter_types', '');
-		    }
-		</script>
-		{/literal}
-		<div id="resultsList"></div>
-		<div id="reset"></div>
-	</div>        
+    <h3>All Users</h3>
+	<div id='qresults'>
+		<table id='results'>
+			<thead>
+			  <tr>
+				<th>Username</th>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th></th>
+			  </tr>
+			</thead>
+			<tbody>
+                {foreach from=$users item="row" key=k  name="row"}
+				<tr class='actioninfo' id='actioninfo_{$row.UserName}'>
+				   <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
+					<td><input type='text' name='Username' value='{$row.Username}' /></td>
+                       <td><input type='text' name='FirstName' value='{$row.FirstName}' /></td>
+                       <td><input type='text' name='LastName' value='{$row.LastName}' /></td>
+					<td><input type='checkbox' name='IsEnabled' {if $row.IsEnabled == 1} checked="checked" {/if} /></td>
+					<td>
+					  <input type='hidden' name='_id' value='{$row._id}' />
+					  <input class='input_button' type='submit' name='update' value='Save' />&nbsp;
+					  <input class='input_button' type='submit' name='del' value='Delete' />
+					</td>
+				   </form>
+				</tr>
+                {/foreach}
+			</tbody>
+		</table>
+	</div>
 </div>

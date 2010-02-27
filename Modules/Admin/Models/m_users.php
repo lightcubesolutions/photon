@@ -28,7 +28,7 @@ class UsersModel extends Model
 	function add()
 	{
 		//Setup the criteria
-		$this->criteria = array('LoginName'=>$this->data['LoginName']);
+		$this->criteria = array('Username'=>$this->data['Username']);
 		parent::add();
 	}
 }
