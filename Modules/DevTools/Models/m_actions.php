@@ -29,8 +29,7 @@ class ActionsModel extends Model
 	{
 		//Setup the criteria
 		$this->criteria = array('ActionName'=>$this->data['ActionName']);
-		parent::add();
-		
+		return parent::add();
 	}
 }
 ?>
