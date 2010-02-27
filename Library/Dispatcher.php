@@ -21,10 +21,10 @@ class Dispatcher
     
     /**
      * 
-     * @param int $userid
+     * @param string $username
      * @return void
      */
-    private function _setAccess($loginname)
+    private function _setAccess($username)
     {  	
         $db = new MongoDBHandler;
         $col = $db->db->Actions;
@@ -53,10 +53,10 @@ class Dispatcher
             $user_request = $request['a'];
         }
 
-        $loginname = (isset($_SESSION['LoginName'])) ? $_SESSION['LoginName'] : 0;
+        $username = (isset($_SESSION['Username'])) ? $_SESSION['Username'] : 0;
 
         // Set the Navigation elements and Actions to which the user has access
-        $this->_setAccess($loginname);
+        $this->_setAccess($username);
         
         // Check to see if the user requested the special 'login' or 'logout'.
         switch ($user_request) {
