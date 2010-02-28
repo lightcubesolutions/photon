@@ -10,6 +10,7 @@
 var xmlHttp;    // The XML HTTP Request Object
 var divId;      // Contains the HTML DOM object which will be updated with the returned results
 var timeout;	// Whether or not to build in a slight delay and show a status div.
+var ajaxcount = 0;
 
 // Create a new XML HTTP Request Object fitting the current browser and assign it to the xmlHttp variable.
 function GetXmlHttpObject()
@@ -59,9 +60,12 @@ function processReturn()
         	}
         }
     }
-    var m = document.getElementById('cfmodal');
-    if (m != null && m != '') {
-        setTimeout('removeModal()', 500);
+    ajaxcount--;
+    if (ajaxcount == 0) {
+    var m = document.getElementById('pmodal');
+	    if (m != null && m != '') {
+	        setTimeout('removeModal()', 100);
+	    }
     }
 }
 
@@ -70,7 +74,6 @@ function processReturn()
 function loadAction(url, domObj, modal, msg)
 {
     if (modal != '' && modal != null && modal != false) {
-        timeout = true;
         newModal(msg);
     } else {
         timeout = false;
@@ -84,41 +87,52 @@ function loadAction(url, domObj, modal, msg)
     xmlHttp.onreadystatechange=stateChanged;
     xmlHttp.open("GET",url,true);
     xmlHttp.send(null);
+    ajaxcount++;
 }
 
 function newModal (msg)
 {
-    if (typeof window.innerWidth != 'undefined') {
-        var h = window.innerHeight;
-        var w = window.innerWidth;
+    var m = document.getElementById('pmodal');
+    if (m != '' && m != null) {
+    	if (msg != '' && msg != null) {
+    		var mm = document.getElementById('pmodal_msg');
+    		if (mm != '' && mm != null) {
+    			mm.innerHTML = msg;
+    		}
+    	}
     } else {
-        var h = document.documentElement.clientHeight;
-        var w = document.documentElement.clientWidth;
-    }
-    var t = (h / 2) - 15;
-    var l = (w / 2) - 15;
-    var i = document.createElement('img');
-    i.style.position = 'absolute';
-    i.style.top = t + 'px';
-    i.style.left = l + 'px';
-    i.style.backgroundColor = '#000000';
-    i.style.zIndex = '100001';
-    i.src='Media/Images/ajax-loader.gif';
-    var d = document.createElement('div');
-    d.id = 'cfmodal';
-    d.style.position = 'fixed';
-    d.style.top = '0px';
-    d.style.left = '0px';
-    d.style.width = w +'px';
-    d.style.height = h +'px';
-    d.style.backgroundColor = '#000000';
-    d.style.opacity = 0.7;
-    d.style.filter = 'alpha(opacity=70)';
-    d.style.zIndex = '100000';
-    d.appendChild(i);
-    if (msg != '' && msg != null) {
+	
+	    if (typeof window.innerWidth != 'undefined') {
+	        var h = window.innerHeight;
+	        var w = window.innerWidth;
+	    } else {
+	        var h = document.documentElement.clientHeight;
+	        var w = document.documentElement.clientWidth;
+	    }
+	    var t = (h / 2) - 15;
+	    var l = (w / 2) - 15;
+	    var i = document.createElement('img');
+	    i.style.position = 'absolute';
+	    i.style.top = t + 'px';
+	    i.style.left = l + 'px';
+	    i.style.backgroundColor = '#000000';
+	    i.style.zIndex = '100001';
+	    i.src='Media/Images/ajax-loader.gif';
+	    var d = document.createElement('div');
+	    d.id = 'pmodal';
+	    d.style.position = 'fixed';
+	    d.style.top = '0px';
+	    d.style.left = '0px';
+	    d.style.width = w +'px';
+	    d.style.height = h +'px';
+	    d.style.backgroundColor = '#000000';
+	    d.style.opacity = 0.7;
+	    d.style.filter = 'alpha(opacity=70)';
+	    d.style.zIndex = '100000';
+	    d.appendChild(i);
         var m = document.createElement('div');
         m.style.position = 'absolute';
+        m.id = 'pmodal_msg';
         m.style.width = '200px';
         m.style.top = t + 50 + 'px';
         m.style.left = (w / 2) - 100 + 'px';
@@ -126,15 +140,17 @@ function newModal (msg)
         m.style.zIndex = '100002';
         m.style.fontSize = '1.2em';
         m.style.color = '#ffffff';
-        m.innerHTML = msg;
         d.appendChild(m);
+		if (msg != '' && msg != null) {
+	        m.innerHTML = msg;
+		}
+	    document.body.appendChild(d);
     }
-    document.body.appendChild(d);
 }
 
 function removeModal()
 {
-    var m = document.getElementById('cfmodal');
+    var m = document.getElementById('pmodal');
     if (m != '' && m != null) {
         document.body.removeChild(m);
     }
