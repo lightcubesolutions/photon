@@ -78,6 +78,7 @@ class MongoDBHandler
      */
     function getData($sort = array(), $where = array())
     {
+        $retarray = array();
         // Only try if the connection has been established.
         if ($this->_connected) {
                                     

@@ -58,12 +58,12 @@ class View
             case 'js':
             case 'javascript':
             case 'script':
-                $this->media['js'][] = "Media/JavaScript/$path";
+                $this->media["Media/JavaScript/$path"] = 'js';
                 break;
 
             case 'css':
             default:
-                $this->media['css'][] = "Media/CSS/$path";
+                $this->media["Media/CSS/$path"] = 'css';
                 break;
        } 
     }
@@ -110,13 +110,11 @@ class View
                     $this->_head .= "<link rel='stylesheet' href='Themes/$this->theme/theme.css' type='text/css' media='screen' />\n";
                 }
                 
-                foreach ($this->media as $type=>$set) {
-                    foreach($set as $key=>$val) {
-                        if ($type == 'js') {
-                            $this->_head .= "<script type='text/javascript' src='$val'></script>\n";
-                        } else {
-                            $this->_head .= "<link rel='stylesheet' href='$val' type='text/css' media='screen' />\n";
-                        }
+                foreach ($this->media as $path=>$type) {
+                    if ($type == 'js') {
+                        $this->_head .= "<script type='text/javascript' src='$path'></script>\n";
+                    } else {
+                        $this->_head .= "<link rel='stylesheet' href='$path' type='text/css' media='screen' />\n";
                     }
                 }
                 

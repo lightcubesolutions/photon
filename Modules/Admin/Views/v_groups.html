@@ -1,0 +1,103 @@
+{literal}
+<style type="text/css">
+#subjects, #targets { list-style-type: none; margin: 0; padding: 0; min-height: 290px; width: 100%; }
+#subjects li, #targets li { margin: 3px 3px 0px 3px; padding: 0 5px; font-size: 1em; cursor: move; }
+</style>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#targets").sortable({
+		connectWith: '#subjects',
+		receive: function(event, ui) {
+			var id = ui.item[0].id;
+			var grp = $("#groupname").val();
+			loadAction('?a=groups&grpmod=add&id='+id+'&grp='+grp, 'debug');
+		},
+		remove: function(event, ui) {
+			var id = ui.item[0].id;
+			var grp = $("#groupname").val();
+			loadAction('?a=groups&grpmod=del&id='+id+'&grp='+grp, 'debug');
+		}
+	});
+	$("#targets").disableSelection();
+	$("#subjects").sortable({ connectWith: '#targets' });
+	$("#subjects").disableSelection();
+});
+function fetchData() {
+	var v = $("#groupname option:eq(0)").val();
+	if (v == 'removeme') { $("#groupname option:eq(0)").remove() };
+	loadAction("?a=groups&fetch=mysubjects&id="+$("#groupname").val(), "targets", true);
+}
+</script>
+{/literal}
+            
+<div>
+
+	<h3>Assign Subjects to a Group</h3>
+	<p>Begin by choosing a group to modify from the drop-down menu below.</p>
+	<div style="margin: 5px 0 10px 0;">
+		<div style="margin-right: 3px; float: left; width: 350px;">
+			<select id='groupname' name='Name' onchange='fetchData();'>
+				<option value='removeme'>Choose a Group...</option>
+				{foreach from=$groups item="row" name="row"}
+				<option value="{$row._id}">{$row.Name}</option>
+				{/foreach}
+			</select>
+		</div>
+		<div style="margin-right: 3px; float: left; width: 350px;">
+			<span style="margin: 5px;">Available Subjects:</span>
+		</div>
+		<div style="clear: both;"></div>
+		<div style="margin-right: 3px; float: left; width: 350px; overflow: auto; height: 300px; border: 1px solid silver;">
+		    <ul id="targets"></ul>
+		</div>
+		<div style="margin-right: 3px; float: left; width: 350px; overflow: auto; height: 300px; border: 1px solid silver;">
+		    <ul id="subjects"></ul>
+		</div>
+		<div style="clear: both;"></div>
+    </div>
+
+	<h3>Add a New Group</h3>
+	<div style="margin: 5px 0 10px 0;">
+	    <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
+	        <table>
+	            <tr>
+			        <td><label>Group Name</label><br /><input type="text" name="Name" value="" /></td>
+			    </tr>
+	        </table>
+	        <p>
+	            <input class="input_button" type="submit" name="add" value="Add" />
+	            <input class="input_button" type="reset" value="Reset" />
+	            <input type="hidden" name="IsEnabled" value="on" />
+	        </p>
+	    </form>
+	</div>
+    <h3>All Groups</h3>
+	<div style="margin: 5px 0 10px 0;">
+		<table>
+			<thead>
+			  <tr>
+				<th>Group Name</th>
+				<th>Enabled</th>
+				<th></th>
+			  </tr>
+			</thead>
+			<tbody>
+                {foreach from=$groups item="row" key=k  name="row"}
+				<tr>
+				   <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
+					<td><input type='text' name='Name' value='{$row.Name}' /></td>
+					<td><input type='checkbox' name='IsEnabled' {if $row.IsEnabled == 1} checked="checked" {/if} /></td>
+					<td>
+					  <input type='hidden' name='_id' value='{$row._id}' />
+					  <input class='input_button' type='submit' name='update' value='Save' />&nbsp;
+					  <input class='input_button' type='submit' name='del' value='Delete' />
+					</td>
+				   </form>
+				</tr>
+                {/foreach}
+			</tbody>
+		</table>
+	</div>
+
+</div>
+<pre id="debug"></pre>
