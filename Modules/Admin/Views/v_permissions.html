@@ -1,0 +1,64 @@
+{literal}
+<style type="text/css">
+#subjects, #targets { list-style-type: none; margin: 0; padding: 0; min-height: 290px; width: 100%; }
+#subjects li, #targets li { margin: 3px 3px 0px 3px; padding: 0 5px; font-size: 1em; cursor: move; }
+</style>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#targets").sortable({
+		connectWith: '#subjects',
+		receive: function(event, ui) {
+			var id = ui.item[0].id;
+			var action = $("#groupname").val();
+			loadAction('?a=permissions&permmod=add&id='+id+'&action='+action, 'debug');
+		},
+		remove: function(event, ui) {
+			var id = ui.item[0].id;
+			var action = $("#groupname").val();
+			loadAction('?a=permissions&permmod=del&id='+id+'&action='+action, 'debug');
+		}
+	});
+	$("#targets").disableSelection();
+	$("#subjects").sortable({ connectWith: '#targets' });
+	$("#subjects").disableSelection();
+});
+function fetchData() {
+	var v = $("#groupname option:eq(0)").val();
+	if (v == 'removeme') { $("#groupname option:eq(0)").remove() };
+	loadAction("?a=permissions&fetch=mysubjects&id="+$("#groupname").val(), "targets", true);
+}
+</script>
+{/literal}
+            
+<div>
+
+	<h3>Assign Subjects to an Action or Module</h3>
+	<p>Begin by choosing an action or module to modify from the drop-down menu below.</p>
+	<div style="margin: 5px 0 10px 0;">
+		<div style="margin-right: 3px; float: left; width: 350px;">
+			<select id='groupname' name='Name' onchange='fetchData();'>
+				<option value='removeme'>Choose a Module or Action...</option>
+				{foreach from=$permobjs item="row" name="row"}
+				{if $row.type == 'module'}
+				<option value="{$row.Name}">Module :: {$row.Name}</option>
+				{else}
+				<option value="{$row.module}|{$row.Name}">Action :: {$row.module}/{$row.Name}</option>
+				{/if}
+				{/foreach}
+			</select>
+		</div>
+		<div style="margin-right: 3px; float: left; width: 350px;">
+			<span style="margin: 5px;">Available Subjects:</span>
+		</div>
+		<div style="clear: both;"></div>
+		<div style="margin-right: 3px; float: left; width: 350px; overflow: auto; height: 300px; border: 1px solid silver;">
+		    <ul id="targets"></ul>
+		</div>
+		<div style="margin-right: 3px; float: left; width: 350px; overflow: auto; height: 300px; border: 1px solid silver;">
+		    <ul id="subjects"></ul>
+		</div>
+		<div style="clear: both;"></div>
+    </div>
+
+</div>
+<pre id="debug"></pre>

@@ -147,6 +147,7 @@ if (isset($_REQUEST['fetch'])) {
     $view->register('js', 'jquery-1.3.2.min.js');
     $view->register('js', 'jquery-ui-1.7.2.custom.min.js');
     $view->register('js', 'jquery.dump.js');
+    $view->register('js', 'ajax_functions.js');
     $view->register('css', 'smoothness/jquery-ui-1.7.2.custom.css');
     $view->pagetitle = "$shortappname :: Groups Administrator";
 }

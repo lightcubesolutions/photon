@@ -1,0 +1,18 @@
+
+{foreach from=$children item="row" name="row"}
+<li id="{$row.SubjectType}_{$row.Subject}" class="ui-state-default {if $row.SubjectType == 'group'}ui-state-hover{else}ui-state-active{/if}">
+	{if $row.SubjectType == 'group'}
+	<span class='ui-icon ui-icon-person' style="float: left; margin: 4px 0 0 0; padding: 0;"></span>
+	{/if}
+	<span class='ui-icon ui-icon-person' style="float: left; margin: 4px 10px 0 0;"></span>
+	{$row.Name}
+</li>
+{/foreach}
+
+{if $getsubjects}
+<script>
+	loadAction('?a=permissions&fetch=possible&id='+$('#groupname').val(), 'subjects', true, 'Finding available subjects');
+</script>
+{else}
+<pre>{$debug}</pre>
+{/if}

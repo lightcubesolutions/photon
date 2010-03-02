@@ -48,13 +48,14 @@ class Authentication
     function setSessionInfo($user)
     {
         $db = new MongoDBHandler;
-        $col = $db->db->Users;
-        $data = $col->findOne(array('Username'=>$user));
+        $db->col = $db->db->Users;
+        $data = $db->col->findOne(array('Username'=>$user));
         if (!empty($data)) {
             $_SESSION['Username']    = $data['Username'];
             $_SESSION['FirstName']   = ucwords(strtolower($data['FirstName']));
             $_SESSION['LastName']    = ucwords(strtolower($data['LastName']));
             $_SESSION['FullName']    = "$_SESSION[FirstName] $_SESSION[LastName]";
+            $_SESSION['Userid']      = "$data[_id]";
         }
     }
 
@@ -71,8 +72,8 @@ class Authentication
         $timestamp = $dt->format('U');
         $id = session_id();
         $db = new MongoDBHandler;
-        $col = $db->db->ActiveSessions;
-        $data = $col->findOne(array('SessionID'=>$id));
+        $db->col = $db->db->ActiveSessions;
+        $data = $db->col->findOne(array('SessionID'=>$id));
         if (!empty($data)) {
             if ($data['IP'] == ip2long($_SERVER['REMOTE_ADDR'])) {
                 // Session has already been recorded & the IP address matches
@@ -106,8 +107,8 @@ class Authentication
         $id = session_id();
         $db = new MongoDBHandler;
         $this->login_form = true;
-        $col = $db->db->ActiveSessions;
-        $col->remove(array('SessionID'=>$id));
+        $db->col = $db->db->ActiveSessions;
+        $db->col->remove(array('SessionID'=>$id));
         $_SESSION = array();
     }
 
@@ -137,8 +138,8 @@ class Authentication
     {
         $retval = false;
         $db = new MongoDBHandler;
-        $col = $db->db->Users;
-        $row = $col->findOne(array('Username'=>"$user", 'IsEnabled'=>'1'));
+        $db->col = $db->db->Users;
+        $row = $db->col->findOne(array('Username'=>"$user", 'IsEnabled'=>'1'));
         if (!empty($row)) {
             $retval = $row['Password'];
         }
@@ -157,9 +158,9 @@ class Authentication
         $retval = false;
         $id = session_id();
         $db = new MongoDBHandler;
-        $col = $db->db->ActiveSessions;
+        $db->col = $db->db->ActiveSessions;
         try {
-            $col->insert(array('SessionID'=>$id, 'IP'=>ip2long($_SERVER['REMOTE_ADDR'])), true);
+            $db->col->insert(array('SessionID'=>$id, 'IP'=>ip2long($_SERVER['REMOTE_ADDR'])), true);
             $retval = true;
         } catch(MongoCursorException $e) {
             $db->error = $e;

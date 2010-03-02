@@ -17,25 +17,6 @@ class Dispatcher
     public $special;            // Is this a special, internal action?
     public $action;             //
     public $status;
-    private $_access;           //
-    
-    /**
-     * 
-     * @param string $username
-     * @return void
-     */
-    private function _setAccess($username)
-    {  	
-        $db = new MongoDBHandler;
-        $col = $db->db->Actions;
-    	//Get data from Actions collection
-        $cur = $col->find(array("IsEnabled"=>"1"));
-
-        //Loop through actions
-        foreach ($cur as $obj){
-        	$this->_access[] = $obj;
-        }
-    }
  
     /**
      * parse function. Determines if a configured action exists from the client's
@@ -52,11 +33,10 @@ class Dispatcher
         if (array_key_exists('a', $request)) {
             $user_request = $request['a'];
         }
+        
+        $db = new MongoDBHandler;
 
-        $username = (isset($_SESSION['Username'])) ? $_SESSION['Username'] : 0;
-
-        // Set the Navigation elements and Actions to which the user has access
-        $this->_setAccess($username);
+        $id = (isset($_SESSION['Userid'])) ? $_SESSION['Userid'] : '0';
         
         // Check to see if the user requested the special 'login' or 'logout'.
         switch ($user_request) {
@@ -67,19 +47,23 @@ class Dispatcher
                 break;
             default:
                 $access = false;
-                foreach ($this->_access as $action) {                    
-                    if ($action['ActionName'] == $user_request) {
-                         $this->action  = $action['ActionName'];
-                         
-                         // FIXME: should be controller.
-                         $this->controller = "Modules/$action[Module]/Controllers/$action[Controller]";
-                         $access = true;
-                         $this->status = true;
-                         break;
+                // Determine if the user has access.
+                // 1. Find the Action.
+                $db->col = $db->db->Actions;
+                $action = $db->col->findOne(array('ActionName'=>$user_request));
+                
+                if (!empty($action)) {
+                    $module = $action['Module'];
+                    $db->col = $db->db->Permissions;   
+                    // 2. Has Permission been set explicitly for this user?
+                    $access = $db->col->findOne(array('Subject'=>$id, 'ActionName'=>$action['ActionName']));
+                    
+                    if (!empty($access)) {
+                        $access = true;
+                        $this->status = true;
+                        $this->controller = "Modules/$module/Controllers/$action[Controller]";
+                        $this->action = $action['ActionName'];
                     }
-                }
-                if (!$access) {
-                     $this->controller = 'error.php';
                 }
                 break;
         }
