@@ -63,6 +63,31 @@ hr { display: none; }
 	margin-right: 0;
 }
 
+#wrapper {
+	position: relative;
+	width: 1000px;
+	margin: 0 auto;
+}
+
+#loginwrapper {
+	position: absolute;
+	top: 0;
+	right: 20px;
+}
+
+#loginwrapper ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#loginwrapper ul li {
+	display: inline;
+	vertical-align: middle;
+	color: #ffffff;
+	padding-left: 5px;
+}
+
 #header {
 	width: 940px;
 	height: 46px;
