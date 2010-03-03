@@ -33,6 +33,36 @@ class GroupsModel extends Model
 		$this->criteria = array('Name'=>$this->data['Name']);
 		return parent::add();
 	}
+	
+	/**
+	 * getParents function
+	 * return all parents of a supplied group.
+	 * 
+	 * @param $id
+	 * @return mixed
+	 */
+	function getParents($id)
+	{
+	    $retval = false;
+	    $ids[] = $id;
+        while (!empty($ids)) {
+            foreach ($ids as $key=>$id) {
+                $parents[] = $id;
+                $obj = $this->col->findOne(array('_id' => new MongoID($id)));
+                unset($ids[$key]);
+                if (array_key_exists('Groups', $obj)) {
+                    foreach ($obj['Groups'] as $new) {
+                        $ids[] = $new;
+                    }
+                }                  
+            }
+        }
+        if (!empty($parents)) {
+            $retval = $parents;
+        }
+        return $retval;
+	}
+	
 }
 
 ?>

@@ -17,6 +17,16 @@ class Dispatcher
     public $special;            // Is this a special, internal action?
     public $action;             //
     public $status;
+    
+    private $_action;
+    private $_module;
+    
+    private function _grantaccess()
+    {
+        $this->status = true;
+        $this->controller = "Modules/$this->_module/Controllers/".$this->_action['Controller'];
+        $this->action = $this->_action['ActionName'];
+    }
  
     /**
      * parse function. Determines if a configured action exists from the client's
@@ -46,23 +56,61 @@ class Dispatcher
                 $this->status = true;
                 break;
             default:
-                $access = false;
                 // Determine if the user has access.
-                // 1. Find the Action.
-                $db->col = $db->db->Actions;
-                $action = $db->col->findOne(array('ActionName'=>$user_request));
+                // 1. Find the Action. FIXME: Ensure the action is enabled.
+                $model = new ActionsModel;
+                $this->_action = $model->col->findOne(array('ActionName'=>$user_request));
                 
-                if (!empty($action)) {
-                    $module = $action['Module'];
-                    $db->col = $db->db->Permissions;   
+                // Before starting down this road, a check should be made if the user is not logged in, just find if the action is public.
+                if (!empty($this->_action)) {
+                    $this->_module = $this->_action['Module'];
+                    $pmodel = new PermissionsModel;
+                      
                     // 2. Has Permission been set explicitly for this user?
-                    $access = $db->col->findOne(array('Subject'=>$id, 'ActionName'=>$action['ActionName']));
+                    $access = $pmodel->col->findOne(array('Subject'=>$id, 'ActionName'=>$this->_action['ActionName']));
                     
                     if (!empty($access)) {
-                        $access = true;
-                        $this->status = true;
-                        $this->controller = "Modules/$module/Controllers/$action[Controller]";
-                        $this->action = $action['ActionName'];
+                        $this->_grantaccess();
+                    } else {
+                        
+                        // No direct permission
+                        // 3. Does this user have permission to the whole Module?
+                        $access = $pmodel->col->findOne(array('Subject'=>$id, 'Module'=>$this->_module, 'ActionName'=>array('$exists'=>false)));
+                        
+                        if (!empty($access)) {
+                            $this->_grantaccess();
+                        } else {
+                            
+                            // No User permission on module
+                            // 4. Do any of my groups have permissions?
+                            $model = new UsersModel;
+                            $mygroups = $model->getGroups($id);
+                            if ($mygroups) {
+                                $myparents = array();
+                                $model = new GroupsModel;
+                                foreach ($mygroups as $group) {
+                                    $parents = $model->getParents($group);
+                                    if ($parents) {
+                                        $myparents = array_merge($myparents, $parents);
+                                    }
+                                }
+                                if (!empty($myparents)) {
+                                    foreach ($myparents as $group) {
+                                        // Check if direct permission is set on action
+                                        $access = $pmodel->col->findOne(array('Subject'=>$group, 'ActionName'=>$this->_action['ActionName']));
+                                        // Check if permission is set on entire module
+                                        if (empty($access)) {
+                                            $access = $pmodel->col->findOne(array('Subject'=>$group, 'Module'=>$this->_module, 'ActionName'=>array('$exists'=>false)));
+                                        }
+                                        if (!empty($access)) {
+                                            $this->_grantaccess();
+                                            break;
+                                        }
+                                        
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 break;

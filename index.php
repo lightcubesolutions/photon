@@ -121,7 +121,7 @@ if (!empty($dispatch->special)) {
         $view->assign('loggedin', true);
         $view->assign('fullname', $_SESSION['FullName']);
     }
-    include($dispatch->controller);
+    require($dispatch->controller);
     $view->display();
 }
 ?>

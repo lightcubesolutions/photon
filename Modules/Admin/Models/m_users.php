@@ -31,6 +31,24 @@ class UsersModel extends Model
 		$this->criteria = array('Username'=>$this->data['Username']);
 		return parent::add();
 	}
+	
+	/**
+	 * getGroups function
+	 * find all direct groups assigned to a user
+	 * 
+	 * @param $id
+	 * @return mixed
+	 */
+	function getGroups($id)
+	{
+	    $retval = false;
+	    // Pull all groups for a user
+	    $user = $this->col->findOne(array('_id'=>new MongoID($id)));
+	    if (!empty($user['Groups'])) {
+	        $retval = $user['Groups'];
+	    }
+	    return $retval;
+	}
 }
 
 ?>
