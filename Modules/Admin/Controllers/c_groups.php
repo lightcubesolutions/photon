@@ -10,12 +10,10 @@
  */
 
 defined('__photon') || die();
-require('Modules/Admin/Models/m_groups.php');
 
 $model = new GroupsModel;
 
 if (isset($_REQUEST['fetch'])) {
-    require('Modules/Admin/Models/m_users.php');
     $id = $_REQUEST['id'];
     switch ($_REQUEST['fetch']) {
         
@@ -91,7 +89,6 @@ if (isset($_REQUEST['fetch'])) {
     $grp = $_REQUEST['grp'];
     $id = new MongoID($item[1]);
     if ($item[0] == 'user') {
-        require('Modules/Admin/Models/m_users.php');
         $model = new UsersModel;
     }
     switch ($_REQUEST['grpmod']) {
@@ -121,7 +118,6 @@ if (isset($_REQUEST['fetch'])) {
         
         $model->data = $data;
      
-        require('Library/UITools.php');
         $ui = new UITools;
         
         if (isset($_POST['add'])) {

@@ -10,13 +10,9 @@
  */
 
 defined('__photon') || die();
-require('Modules/Admin/Models/m_permissions.php');
 $model = new PermissionsModel;  
 
-
 if (isset($_REQUEST['fetch'])) {
-    require('Modules/Admin/Models/m_users.php');
-    require('Modules/Admin/Models/m_groups.php');
 
     $id = $_REQUEST['id'];
     $pieces = explode('|', $id);

@@ -10,14 +10,11 @@
 
 defined("__photon") || die();
 
-require_once('Modules/DevTools/Models/m_actions.php');
-
 $model = new ActionsModel;
 
 if(isset($_POST)) {
     $data = $_POST;
 
-    require('Library/UITools.php');
     $ui = new UITools;
     
     // Swap out values...

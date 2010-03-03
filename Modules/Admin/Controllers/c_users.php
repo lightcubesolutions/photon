@@ -9,13 +9,11 @@
  */
 
 defined('__photon') || die();
-require_once('Modules/Admin/Models/m_users.php');
 $model = new UsersModel;
 
 if(!empty($_POST)) {
     $data = $_POST;
     
-    require('Library/UITools.php');
     $ui = new UITools;
     
     // Swap out values...

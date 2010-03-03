@@ -12,12 +12,28 @@
 // Include site configuration.
 require('config.php');
 
-// Include necessary Libraries
-require('Library/MongoDBHandler.php');
-require('Library/Dispatcher.php');
-require('Library/Authentication.php');
-require('Library/View.php');
-require('Library/Model.php');
+// Auto include necessary classes - PHP runs this whenever it is asked
+// to use a Class it doesn't yet know about.
+function __autoload($class)
+{
+    $try = "Library/$class.php";
+    if (file_exists($try)) {
+        require($try);
+    } else {
+        // Maybe this is a Model
+        $name = str_replace('model', '', strtolower($class));
+        $modules = scandir('Modules');
+        foreach ($modules as $module) {
+            if (is_dir("Modules/$module")) {
+                $try = "Modules/$module/Models/m_$name.php";
+                if (file_exists($try)) {
+                    require($try);
+                    break;
+                }
+            }
+        }
+    }
+}
 
 // Instantiate new global instances of classes we will reuse.
 $dispatch = new Dispatcher;
