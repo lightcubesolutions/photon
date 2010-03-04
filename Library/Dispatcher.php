@@ -59,7 +59,7 @@ class Dispatcher
                 // Determine if the user has access.
                 // 1. Find the Action. FIXME: Ensure the action is enabled.
                 $model = new ActionsModel;
-                $this->_action = $model->col->findOne(array('ActionName'=>$user_request));
+                $this->_action = $model->col->findOne(array('ActionName'=>$user_request,'IsEnabled'=>"1"));
                 
                 // Before starting down this road, a check should be made if the user is not logged in, just find if the action is public.
                 if (!empty($this->_action)) {

@@ -43,7 +43,7 @@ class UsersModel extends Model
 	{
 	    $retval = false;
 	    // Pull all groups for a user
-	    $user = $this->col->findOne(array('_id'=>new MongoID($id)));
+	    $user = $this->col->findOne(array('_id'=>new MongoID($id), 'IsEnabled'=>"1"));
 	    if (!empty($user['Groups'])) {
 	        $retval = $user['Groups'];
 	    }
