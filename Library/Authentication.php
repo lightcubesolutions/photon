@@ -15,6 +15,7 @@ class Authentication
     public $login_form = true;
 
     // Set the session timeout to 30 minutes.
+    // FIXME: Make this a more configurable option?
     private $_timeout = 1800;
     
     const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890123456789';
@@ -68,6 +69,7 @@ class Authentication
      */
     function checkSession()
     {
+        $retval = true;
         $dt = new DateTime;
         $timestamp = $dt->format('U');
         $id = session_id();
@@ -80,6 +82,10 @@ class Authentication
                 // Just make sure the key exists and the session hasn't expired. 
                 if (empty($_SESSION['key']) || ($timestamp - $_SESSION['timestamp']) >= $this->_timeout) {
                     $this->resetSession();
+                    $_SESSION['expired'] = true;
+                    $view = new View;
+                    $view->redirect();
+                    $retval = false;
                 } else {
                     $this->login_form = false;
                 }
@@ -93,6 +99,7 @@ class Authentication
             $this->login_form = ($_REQUEST['a'] != 'login') ? true : false;
         }
         $_SESSION['timestamp'] = $timestamp;
+        return $retval;
     }
 
 

@@ -64,7 +64,7 @@ function processReturn()
     if (ajaxcount == 0) {
     var m = document.getElementById('pmodal');
 	    if (m != null && m != '') {
-	        setTimeout('removeModal()', 100);
+	        setTimeout('removeModal()', 300);
 	    }
     }
 }

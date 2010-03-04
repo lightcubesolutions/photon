@@ -57,71 +57,71 @@ define('__photon', true);
 date_default_timezone_set($tz);
 
 // Make sure the Session isn't expired or the recorded IP is invalid
-$auth->checkSession();
+if ($auth->checkSession()) {
 
-// Parse the $_REQUEST array, look for the action
-$dispatch->parse($_REQUEST);
-
-if ($dispatch->status === false) {
-    // No matching action found in the DB. Just use the default 
-    $dispatch->controller = 'Modules/Home/Controllers/c_home.php';
-}
-
-if (!empty($dispatch->special)) {
-
-    // Handle the special login or logout request if it was given
-    // FIXME: Have view output the below.
-    switch ($dispatch->special) {
-
-        case 'login':
-            if ($auth->login($_REQUEST['h'], $_REQUEST['u'])) {
-                $auth->recordLogin();
-                $auth->setSessionInfo($_REQUEST['u']);
-
-                // Set the action - use a previously requested query, if it was requested before login
-                // Otherwise, use the default
-                $redirect = (empty($_SESSION['prev_query'])) ? "a=$default_action" : $_SESSION['prev_query'];
-
-                // Perform the redirect
-                // It's odd, but IE needs something here before the script, so add a space char '&nbsp;'
-                echo "&nbsp;
-                  <script>
-                    window.location = '?$redirect';
-                  </script>";
-            } else {
-                echo "Login Failed
-                  <script>
-                    document.getElementById('login_status').className = 'error';
-                  </script>";
-            }
-            break;
-
-        case 'logout':
-            $auth->logout();
-
-            // Redirect to empty request.
-            header('Location: ?');
-            break;
+    if (isset($_SESSION['expired'])) {
+        $ui = new UITools;
+        $ui->statusMsg('Your session has expired. Please login again.');
+        unset($_SESSION['expired']);   
     }
     
-} else {
-    // Set up the Login form if we need to.
-    if ($auth->login_form) {
-        
-        $_SESSION['key'] = $auth->randomString(20);
-        $_SESSION['prev_query'] = $_SERVER['QUERY_STRING'];
-        
-        $view->assign('key', $_SESSION['key']);
-        $view->register('js', 'sha1.js');
-        $view->register('js', 'ajax_functions.js');
-        $view->register('js', 'login.js');
+    // Parse the $_REQUEST array, look for the action
+    $dispatch->parse($_REQUEST);
+    
+    if ($dispatch->status === false) {
+        // No matching action found in the DB. Just use the default 
+        $dispatch->controller = 'Modules/Home/Controllers/c_home.php';
+    }
+    
+    if (!empty($dispatch->special)) {
+    
+        // Handle the special login or logout request if it was given
+        // FIXME: Have view output the below.
+        switch ($dispatch->special) {
+    
+            case 'login':
+                if ($auth->login($_REQUEST['h'], $_REQUEST['u'])) {
+                    $auth->recordLogin();
+                    $auth->setSessionInfo($_REQUEST['u']);
+    
+                    // Set the action - use a previously requested query, if it was requested before login
+                    // Otherwise, use the default
+                    $redirect = (empty($_SESSION['prev_query'])) ? "a=$default_action" : $_SESSION['prev_query'];
+                    // Perform the redirect
+                    $view->redirect($redirect);
+    
+                } else {
+                    echo "<span class='error'>Login Failed</span>";
+                }
+                break;
+    
+            case 'logout':
+                $auth->logout();
+    
+                // Redirect to empty request.
+                header('Location: ?');
+                break;
+        }
         
     } else {
-        // Set up the logout link
-        $view->assign('loggedin', true);
-        $view->assign('fullname', $_SESSION['FullName']);
+        // Set up the Login form if we need to.
+        if ($auth->login_form) {
+            
+            $_SESSION['key'] = $auth->randomString(20);
+            $_SESSION['prev_query'] = $_SERVER['QUERY_STRING'];
+            
+            $view->assign('key', $_SESSION['key']);
+            $view->register('js', 'sha1.js');
+            $view->register('js', 'ajax_functions.js');
+            $view->register('js', 'login.js');
+            
+        } else {
+            // Set up the logout link
+            $view->assign('loggedin', true);
+            $view->assign('fullname', $_SESSION['FullName']);
+        }
+        require($dispatch->controller);
+        $view->display();
     }
-    require($dispatch->controller);
-    $view->display();
 }
 ?>

@@ -32,6 +32,19 @@ class View
 </body>
 </html>
 ';
+
+    /**
+     * redirect function
+     * @param $redirect
+     */
+    function redirect($redirect = '')
+    {
+        // It's odd, but IE needs something here before the script, so add a space char '&nbsp;'
+        echo "&nbsp;
+          <script>
+            window.location = '?$redirect';
+          </script>";
+    }
     
     /**
      * assign function
