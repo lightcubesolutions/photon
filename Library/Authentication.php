@@ -32,7 +32,7 @@ class Authentication
     {
         $retval = false;
         $pass = $this->getPassword($user);
-        if ($this->checkHash($_SESSION['key'], $pass, $hash)) {
+        if ($this->checkHash($pass, $hash)) {
             $retval = true;
         }
         return $retval;
@@ -197,15 +197,14 @@ class Authentication
      * checkHash function.
      * 
      * @access public
-     * @param mixed $key
      * @param mixed $pass
      * @param mixed $sent
      * @return boolean
      */
-    function checkHash($key, $pass, $sent)
+    function checkHash($pass, $sent)
     {
         $retval = false;
-        $this->hash = sha1($key.$pass);
+        $this->hash = sha1($_SESSION['key'].$pass);
         $retval = ($this->hash == $sent) ? true : false;
         return $retval;
     }

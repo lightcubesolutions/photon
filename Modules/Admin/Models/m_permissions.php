@@ -22,17 +22,6 @@ class PermissionsModel extends Model
 		$this->col = $this->db->Permissions;		
 	}
 
-	/**
-	 * add function inserts data into MongoDB only if Name is unique
-	 * FIXME: Add check for group loops?
-	 * @return boolean
-	 */
-	function add()
-	{
-		//Setup the criteria
-		$this->criteria = array('Name'=>$this->data['Name']);
-		return parent::add();
-	}
 }
 
 ?>

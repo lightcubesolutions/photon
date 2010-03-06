@@ -45,16 +45,19 @@ class MongoDBHandler
         $this->_link = new Mongo();
         
         // Select the DB
-        $this->db = $this->_link->selectDB($this->dbname);
-
-        // Authenticate
-        $result = $this->db->authenticate($this->dbuser, $this->dbpass);
-        if ($result['ok'] == 0) {
-            // Authentication failed.
-            $this->error = $result['errmsg'];
-            $this->_connected = false;
-        } else {
-            $this->_connected = true;
+        try {
+            $this->db = $this->_link->selectDB($this->dbname);
+            // Authenticate
+            $result = $this->db->authenticate($this->dbuser, $this->dbpass);
+            if ($result['ok'] == 0) {
+                // Authentication failed.
+                $this->error = ($result['errmsg'] == 'auth fails') ? 'Database Authentication Failure' : $result['errmsg'];
+                $this->_connected = false;
+            } else {
+                $this->_connected = true;
+            }
+        } catch (Exception $e) {
+            $this->error = (empty($this->error)) ? 'Database Connection Error' : $this->error;
         }
     }
 

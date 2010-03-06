@@ -94,7 +94,7 @@ class View
             $smarty->template_dir = '.';
             $smarty->compile_dir = 'Library/Smarty/compiled';
             $smarty->config_dir = 'Library/Smarty/configs';
-            
+                        
             foreach ($this->vars as $key=>$val) {
                 $smarty->assign($key, $val);
             }
