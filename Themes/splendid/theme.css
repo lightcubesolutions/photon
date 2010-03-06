@@ -239,13 +239,14 @@ hr {
 }
 
 #logo p {
+	margin-top: -10px;
 	font-size: 13px;
 	color: #639cbf;
 	font-weight: bold;
 }
 
 #logo h1 {
-	padding-top: 80px;
+	padding-top: 90px;
 	font-size: 48px;
 	color: #ffffff;
 	font-weight: normal;

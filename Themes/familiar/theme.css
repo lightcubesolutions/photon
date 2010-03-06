@@ -398,5 +398,11 @@ hr { display: none; }
 	font-size: 10px;
 }
 
+#statusmsg {
+	padding: 10px;
+	display: none;
+	margin-bottom: 10px;
+}
+
 #footer a {
 }
