@@ -123,11 +123,9 @@ if (isset($_REQUEST['fetch'])) {
 } else {
 
     // Find all actions or modules...
-    $model = new MongoDBHandler;
-    $model->col = $model->db->Actions;
-    // All Module names
-    $modules = $model->db->command(array("distinct" => "Actions", "key" => "Module"));    
-    
+    $model = new ActionsModel;
+    // All Module names  
+    $modules = $model->distinct("Module");
     // All actions sorted by Module
     foreach ($modules['values'] as $module) {
         $perms[] = array('Name'=>$module, 'type'=>'module');

@@ -88,6 +88,18 @@ class Model extends MongoDBHandler
         return $retval;
     }
     
+    /**
+     * distinct function
+     * Returns distinct values for a collection
+     * @access public
+     * @return array
+     */
+    public function distinct($key)
+    {
+    	$values = $this->db->command(array("distinct" => $this->col->getName(), "key" => $key));    
+		return $values;
+    }
+    
 }
 
 ?>
