@@ -3,7 +3,7 @@
  * index.php - The entry point for the application
  *
  * @package photon
- * @version 1.0
+ * @version 1.0-a
  * @author LightCube Solutions <info@lightcubesolutions.com>
  * @copyright LightCube Solutions, LLC. 2010
  * @license http://www.lightcubesolutions.com/LICENSE

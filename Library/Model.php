@@ -5,7 +5,7 @@
  * All methods contained in this class should be useable by multiple models
  * 
  * @package photon 
- * @version 1.0-a
+ * @version 1.0-a-a
  * @author LightCube Solutions <info@lightcubesolutions.com>
  * @copyright LightCube Solutions, LLC. 2010
  * @license http://www.lightcubesolutions.com/LICENSE

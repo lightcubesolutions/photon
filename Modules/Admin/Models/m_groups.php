@@ -3,7 +3,7 @@
  * m_groups.php - Groups Model Class
  * 
  * @package photon 
- * @version 1.0-a
+ * @version 1.0-a-a
  * @author LightCube Solutions <info@lightcubesolutions.com>
  * @copyright LightCube Solutions, LLC. 2010
  * @license http://www.lightcubesolutions.com/LICENSE

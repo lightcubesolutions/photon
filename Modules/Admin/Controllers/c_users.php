@@ -2,8 +2,8 @@
 /**
  * users.php - Manage users
  *
- * @package RBC Project
- * @version 1.0
+ * @package photon
+ * @version 1.0-a
  * @author LightCube Solutions <info@lightcubesolutions.com>
  * @copyright LightCube Solutions, LLC. 2010
  */

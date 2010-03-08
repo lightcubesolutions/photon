@@ -2,7 +2,7 @@
 /**
  * UITools class
  *
- * @version 1.0
+ * @version 1.0-a
  * @copyright LightCube Solutions, LLC. 2010
  * @author LightCube Solutions <info@lightcubesolutions.com>
  * @license http://www.lightcubesolutions.com/LICENSE
