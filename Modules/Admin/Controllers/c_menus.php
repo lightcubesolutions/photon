@@ -76,12 +76,8 @@ if(isset($_POST)) {
     
     $view->template = 'Modules/Admin/Views/v_menus.html';
     $view->assign('thisaction', "$_SERVER[QUERY_STRING]");
-    $view->register('js', 'jquery-1.3.2.min.js');
-    $view->register('js', 'jquery-ui-1.7.2.custom.min.js');
     $view->register('js', 'ajax_functions.js');
-    $view->register('css', 'smoothness/jquery-ui-1.7.2.custom.css');
     $view->pagetitle = "$shortappname :: Navigator Administrator";
-    $view->assign('permobjs', $perms);
     $view->assign('menus', $menus);
 
 ?>

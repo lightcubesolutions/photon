@@ -12,7 +12,7 @@ defined("__photon") || die();
 
 $model = new ActionsModel;
 
-if(isset($_POST)) {
+if(!empty($_POST)) {
     $data = $_POST;
 
     $ui = new UITools;

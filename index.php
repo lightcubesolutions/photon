@@ -97,7 +97,8 @@ if (!file_exists('config.php')) {
                         $view->redirect($redirect);
         
                     } else {
-                        echo "<span class='error'>Login Failed</span>";
+                        $ui = new UITools;
+                        $ui->statusMsg('Login Failed', 'error', false);
                     }
                     break;
         

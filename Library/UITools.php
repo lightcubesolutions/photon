@@ -16,16 +16,11 @@ class UITools
      * 
      * @param string $msg
      * @param string $type
-     * @param boolean $usesmarty
+     * @param boolean $render
      * @return unknown_type
      */
-    function statusMsg($msg, $type = 'ok')
+    function statusMsg($msg, $type = 'ok', $render = true)
     {
-        global $view;
-        $view->register('js', 'jquery-1.3.2.min.js');
-        $view->register('js', 'jquery-ui-1.7.2.custom.min.js');
-        $view->register('css', 'smoothness/jquery-ui-1.7.2.custom.css');
-        
         switch(strtolower($type)) {
            case 'ok':
                $icon = '<div class="ui-icon ui-icon-circle-check" style="float:left; margin-right: 10px;"></div>';
@@ -51,8 +46,14 @@ class UITools
            });
         </script>
         ";
-
-        $view->assign('statusmsg', $retval);
+        
+        // Render through the view object?
+        if ($render) {
+            global $view;
+            $view->assign('statusmsg', $retval);
+        } else {
+            echo $retval;
+        }
     }
 }
 
