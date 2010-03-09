@@ -131,14 +131,15 @@ class View
             // Render the HTML via Smarty
             $body = $this->_render($this->template);
 
+            // Make sure that the theme has been specified and the directory for it exists.
+            if (empty($this->theme) || !file_exists("Themes/$this->theme")) {
+            	$this->theme = 'Default';
+            }
+            
             // Add in the HTML header and footer, if necessary.
             if ($this->fullhtml) {
                 $this->_head = self::OPEN;
                 $this->_head .= "<head>\n";
-
-                if (empty($this->theme)) {
-                    $this->theme = 'Default';
-                }
                 
                 if (file_exists("Themes/$this->theme/theme.css")) {
                     $this->_head .= "<link rel='stylesheet' href='Themes/$this->theme/theme.css' type='text/css' media='screen' />\n";
@@ -155,8 +156,6 @@ class View
                 $this->_head .= "<title>$this->pagetitle</title>\n";
                 $this->_head .= "</head>\n";
                 $html = $this->_head;
-                
-                $this->theme = (file_exists("Themes/$this->theme")) ? $this->theme : 'Default';
 
                 $this->_smarty->template_dir = "Themes/$this->theme";
                 $this->_compileDir("Themes/$this->theme/.compiled");
