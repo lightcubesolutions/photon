@@ -99,7 +99,26 @@ class Model extends MongoDBHandler
     	$values = $this->db->command(array("distinct" => $this->col->getName(), "key" => $key));    
 		return $values;
     }
-    
+    /*
+     * push function
+     * Uses the $push mongoDB function
+     * @access public
+     * @return boolean
+     */
+    public function push()
+    {
+    	$retval = false;
+    	$status = $this->col->update($this->criteria, array('$push' => $this->data), array("upsert" =>true));
+    	echo $status;
+    	if($status == true){
+    		$retval = true;
+    	}
+    	else {
+            $this->error = $status['err'];
+        }
+    	
+    	return $retval;
+    }
 }
 
 ?>

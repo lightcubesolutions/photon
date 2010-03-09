@@ -1,0 +1,49 @@
+<div>
+
+	<h3>Add a New Menu</h3>
+	<div style="margin: 5px 0 10px 0;">
+	    <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
+	        <table>
+	            <tr>
+			        <td><label>Menu Name</label><br /><input type="text" name="Name" value="" /></td>
+			    </tr>
+	        </table>
+	        <p>
+	            <input class="input_button" type="submit" name="add" value="Add" />
+	            <input class="input_button" type="reset" value="Reset" />
+	            <input type="hidden" name="IsEnabled" value="1" />
+	            <input type="hidden" name="IsMenu" value="1" />
+	        </p>
+	    </form>
+	</div>
+		<h3>Add a New Menu Item</h3>
+	<div style="margin: 5px 0 10px 0;">
+	    <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
+	        <table>
+	            <tr>
+			        <td><label>Item Name</label><br />
+			        <input type="text" name="Name" value="" /></td>
+			        <td><label>Menu</label><br />
+			        	<select id='menuname' name='MenuID'>
+								{foreach from=$menus item="row" name="row"}
+									<option value="{$row._id}">{$row.Name}</option>
+								{/foreach}
+						</select>				        
+					<td><label>Action</label><br />
+						<select id='actionname' name='Action'>
+								{foreach from=$permobjs item="row" name="row"}
+									<option value="{$row._id}">{$row.module}/{$row.Name}</option>
+								{/foreach}
+						</select>					
+					</td>
+			    </tr>
+	        </table>
+	        <p>
+	            <input class="input_button" type="submit" name="add" value="Add" />
+	            <input class="input_button" type="reset" value="Reset" />
+	            <input type="hidden" name="IsEnabled" value="1" />
+	            <input type="hidden" name="IsItem" value="1" />
+	        </p>
+	    </form>
+	</div>
+</div>
