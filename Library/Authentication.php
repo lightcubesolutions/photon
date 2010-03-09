@@ -77,7 +77,7 @@ class Authentication
         $db->col = $db->db->ActiveSessions;
         $data = $db->col->findOne(array('SessionID'=>$id));
         if (!empty($data)) {
-            if ($data['IP'] == ip2long($_SERVER['REMOTE_ADDR'])) {
+            if ($data['IP'] == $_SERVER['REMOTE_ADDR']) {
                 // Session has already been recorded & the IP address matches
                 // Just make sure the key exists and the session hasn't expired. 
                 if (empty($_SESSION['key']) || ($timestamp - $_SESSION['timestamp']) >= $this->_timeout) {
@@ -167,7 +167,7 @@ class Authentication
         $db = new MongoDBHandler;
         $db->col = $db->db->ActiveSessions;
         try {
-            $db->col->insert(array('SessionID'=>$id, 'IP'=>ip2long($_SERVER['REMOTE_ADDR'])), true);
+            $db->col->insert(array('SessionID'=>$id, 'IP'=>"$_SERVER[REMOTE_ADDR]"), true);
             $retval = true;
         } catch(MongoCursorException $e) {
             $db->error = $e;
