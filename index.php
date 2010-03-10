@@ -13,6 +13,7 @@
 // to use a Class it doesn't yet know about.
 function __autoload($class)
 {
+    // First see if the class is in the Library directory.
     $try = "Library/$class.php";
     if (file_exists($try)) {
         require($try);
@@ -33,7 +34,7 @@ function __autoload($class)
 }
 
 // Instantiate new global instances of classes we will reuse.
-$dispatch = new Dispatcher;
+$dp = new Dispatcher;
 $auth = new Authentication;
 $view = new View;
 
@@ -43,8 +44,10 @@ define('__photon', true);
 if (!file_exists('config.php')) {
     // Don't show the login form
     $view->assign('loggedin', true);
-    include('Modules/Admin/Controllers/c_install.php');
-    $view->display();
+    $auth->login_form = false;
+    // Display the install form
+    $dp->controller = 'Modules/Admin/Controllers/c_install.php';
+    $dp->dispatch();
 } else {
     // Include site configuration.   
     require('config.php');    
@@ -72,66 +75,15 @@ if (!file_exists('config.php')) {
         }
         
         // Parse the $_REQUEST array, look for the action
-        $dispatch->parse($_REQUEST);
+        $dp->parse($_REQUEST);
         
-        if ($dispatch->status === false) {
+        if ($dp->status === false) {
             // No matching action found in the DB. Just use the default 
-            $dispatch->controller = 'Modules/Home/Controllers/c_home.php';
+            $dp->controller = 'Modules/Home/Controllers/c_home.php';
         }
         
-        if (!empty($dispatch->special)) {
-        
-            // Handle the special login or logout request if it was given
-            // FIXME: Put this logic elsewhere?
-            switch ($dispatch->special) {
-        
-                case 'login':
-                    if ($auth->login($_REQUEST['h'], $_REQUEST['u'])) {
-                        $auth->recordLogin();
-                        $auth->setSessionInfo($_REQUEST['u']);
-        
-                        // Set the action - use a previously requested query, if it was requested before login
-                        // Otherwise, use the default
-                        $redirect = (empty($_SESSION['prev_query'])) ? "a=$default_action" : $_SESSION['prev_query'];
-                        // Perform the redirect
-                        $view->redirect($redirect);
-        
-                    } else {
-                        $ui = new UITools;
-                        $ui->statusMsg('Login Failed', 'error', false);
-                    }
-                    break;
-        
-                case 'logout':
-                    $auth->logout();
-        
-                    // Redirect to empty request.
-                    header('Location: ?');
-                    break;
-            }
-            
-        } else {
-            // Set up the Login form if we need to.
-            if ($auth->login_form) {
-                
-                $_SESSION['key'] = $auth->randomString(20);
-                
-                $_SESSION['prev_query'] = $_SERVER['QUERY_STRING'];
-                
-                $view->assign('loginkey', $_SESSION['key']);
-                $view->register('js', 'sha1.js');
-                $view->register('js', 'ajax_functions.js');
-                $view->register('js', 'login.js');
-            } else {
-                // Set up the logout link
-                $view->assign('loggedin', true);
-                $view->assign('fullname', $_SESSION['FullName']);
-            }
-            require($dispatch->controller);
-            
-            $view->display();
-
-        }
+        // Handle the request
+        $dp->dispatch();
     }
 }
 ?>

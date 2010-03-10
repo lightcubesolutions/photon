@@ -69,17 +69,13 @@ class Dispatcher
                     // 2. Has Permission been set explicitly for this user?
                     $access = $pmodel->col->findOne(array('Subject'=>$id, 'ActionName'=>$this->_action['ActionName']));
                     
-                    if (!empty($access)) {
-                        $this->_grantaccess();
-                    } else {
+                    if (empty($access)) {
                         
                         // No direct permission
                         // 3. Does this user have permission to the whole Module?
                         $access = $pmodel->col->findOne(array('Subject'=>$id, 'Module'=>$this->_module, 'ActionName'=>array('$exists'=>false)));
                         
-                        if (!empty($access)) {
-                            $this->_grantaccess();
-                        } else {
+                        if (empty($access)) {
                             
                             // No User permission on module
                             // 4. Do any of my groups have permissions?
@@ -103,7 +99,6 @@ class Dispatcher
                                             $access = $pmodel->col->findOne(array('Subject'=>$group, 'Module'=>$this->_module, 'ActionName'=>array('$exists'=>false)));
                                         }
                                         if (!empty($access)) {
-                                            $this->_grantaccess();
                                             break;
                                         }
                                         
@@ -113,7 +108,72 @@ class Dispatcher
                         }
                     }
                 }
+                if (!empty($access)) {
+                    $this->_grantaccess();
+                }
                 break;
+        }
+    }
+    
+    /**
+     * dispatch function
+     * handles the specified request, by pulling in the appropriate controller
+     * @return void
+     */
+    function dispatch()
+    {
+        global $auth, $view;
+        if (!empty($this->special)) {
+        
+            // Handle the special login or logout request if it was given
+            switch ($this->special) {
+        
+                case 'login':
+                    if ($auth->login($_REQUEST['h'], $_REQUEST['u'])) {
+                        $auth->recordLogin();
+                        $auth->setSessionInfo($_REQUEST['u']);
+        
+                        // Set the action - use a previously requested query, if it was requested before login
+                        // Otherwise, use the default
+                        $redirect = (empty($_SESSION['prev_query'])) ? "a=$default_action" : $_SESSION['prev_query'];
+                        // Perform the redirect
+                        $view->redirect($redirect);
+        
+                    } else {
+                        $ui = new UITools;
+                        $ui->statusMsg('Login Failed', 'error', false);
+                    }
+                    break;
+        
+                case 'logout':
+                    $auth->logout();
+        
+                    // Redirect to empty request.
+                    header('Location: ?');
+                    break;
+            }
+            
+        } else {
+            // Set up the Login form if we need to.
+            if ($auth->login_form) {
+                
+                $_SESSION['key'] = $auth->randomString(20);
+                
+                $_SESSION['prev_query'] = $_SERVER['QUERY_STRING'];
+                
+                $view->assign('loggedin', false);
+                $view->assign('loginkey', $_SESSION['key']);
+                $view->register('js', 'sha1.js');
+                $view->register('js', 'ajax_functions.js');
+                $view->register('js', 'login.js');
+            } else {
+                // Set up the logout link
+                $view->assign('loggedin', true);
+                $view->assign('fullname', $_SESSION['FullName']);
+            }
+            require($this->controller);
+            
+            $view->display();
         }
     }
 
