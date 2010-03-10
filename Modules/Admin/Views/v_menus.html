@@ -2,9 +2,10 @@
 <script type="text/javascript">
 function fetchItems() {
 	var v = $("#menuname option:eq(0)").val();
+	if (v == 'removeme') { $("#menuname option:eq(0)").remove() };
 	loadAction("?a=menus&fetch=items&id="+$("#menuname").val(), "targetitems", false);
 }
-
+$(document).ready(fetchItems());
 </script>
 {/literal}
 <div>
@@ -34,12 +35,14 @@ function fetchItems() {
 			        <input type="text" name="Name" value="" /></td>
 			        <td><label>Menu</label><br />
 			        	<select id='menuname' name='MenuID' onchange='fetchItems();'>
+			        		<option value='removeme'>Choose a Menu...</option>
 								{foreach from=$menus item="row" name="row"}
 									<option value="{$row._id}">{$row.Name}</option>
 								{/foreach}
 						</select>				        
 					<td><label>Action</label><br />
 						<select id='actionname' name='Action'>
+							<option value='removeme'>Choose an Action...</option>
 								{foreach from=$permobjs item="row" name="row"}
 									<option value="{$row._id}">{$row.module}/{$row.Name}</option>
 								{/foreach}

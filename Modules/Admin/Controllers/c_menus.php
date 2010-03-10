@@ -37,13 +37,27 @@ if(!empty($_POST)) {
 			$data['Menu'] = new MongoID($_POST['MenuID']);
 			if (($_POST['ParentItemID']) != 'noparent'){
 				$data['ParentItemID'] = new MongoID($_POST['ParentItemID']);
-			}					
-			$model->data = $data;
-			if($model->add()){
-				$ui->statusMsg('Successfully added the new Menu Item: '.$data['Name']);			
-			}else {
-               $ui->statusMsg($model->error, 'error');
-		 	}  		
+			}
+			if ((($_POST['MenuID']) == 'removeme')){
+				$ui->statusMsg('Please choose an Menu', 'error');
+			}
+			elseif ((($_POST['ParentItemID']) == 'removeme')){
+				$ui->statusMsg('Please choose an Item', 'error');
+			}
+			elseif ((($_POST['Action']) == 'removeme')){
+				$ui->statusMsg('Please choose an Action', 'error');
+			}
+			elseif (empty($_POST['Name'])){
+				$ui->statusMsg('Please Enter a Name', 'error');
+			}
+			else{				
+				$model->data = $data;
+				if($model->add()){
+					$ui->statusMsg('Successfully added the new Menu Item: '.$data['Name']);			
+				}else {
+	               $ui->statusMsg($model->error, 'error');
+			 	}
+			}  		
 		}
 		if (isset($_POST['IsMenu'])) {
 			$model = new MenusModel;
@@ -106,5 +120,7 @@ if(!empty($_POST)) {
     $view->pagetitle = "$shortappname :: Navigator Administrator";
     $view->assign('menus', $menus);
     $view->assign('items', $items);
+    $view->assign('permobjs', $perms);
+    	
 } 
 ?>
