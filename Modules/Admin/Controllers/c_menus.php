@@ -11,33 +11,44 @@
 
 defined('__photon') || die();
 
-$model = new MenusModel;
+if (isset($_REQUEST['fetch'])) {
+
+		$model = new MenuItemsModel;
+		$id = new MongoID($_REQUEST['id']);
+		$items = $model->getData("",array('Menu'=>$id, 'IsEnabled'=>'1'));
+	    $view->template = 'Modules/Admin/Views/v_menuitems.html';
+	    $view->fullhtml = false;	    
+	    $view->assign('items', $items);
+	    
+} else {
 
 
-if(isset($_POST)) {
+if(!empty($_POST)) {
 
  	$ui = new UITools;
         
 	if (isset($_POST['add'])) {
 		if (isset($_POST['IsItem'])){
-			$id = new MongoID($_POST['MenuID']);
-			$model->criteria = array('_id'=>$id);
-			$data['Items'] = array(
-				'_id' => new MongoID(),
-				'Name' => $_POST['Name'],
-				'IsEnabled' => $_POST['IsEnabled'],
-				'Action' => $_POST['Action'],
-				'Items' => array()
-			);	
-			
-			$model->data = $data;
-			$model->push();
-			
-		}
-		if (isset($_POST['IsMenu'])) {
+			$model = new MenuItemsModel;
+
 			$data['Name'] = $_POST['Name'];
 			$data['IsEnabled'] = $_POST['IsEnabled'];
-			$data['Items'] = array();
+			$data['ActionID'] = new MongoID($_POST['Action']);
+			$data['Menu'] = new MongoID($_POST['MenuID']);
+			if (($_POST['ParentItemID']) != 'noparent'){
+				$data['ParentItemID'] = new MongoID($_POST['ParentItemID']);
+			}					
+			$model->data = $data;
+			if($model->add()){
+				$ui->statusMsg('Successfully added the new Menu Item: '.$data['Name']);			
+			}else {
+               $ui->statusMsg($model->error, 'error');
+		 	}  		
+		}
+		if (isset($_POST['IsMenu'])) {
+			$model = new MenusModel;
+			$data['Name'] = $_POST['Name'];
+			$data['IsEnabled'] = $_POST['IsEnabled'];
 			$model->data = $data;
 			if($model->add()){
 				$ui->statusMsg('Successfully added the new Menu Group: '.$data['Name']);			
@@ -67,17 +78,33 @@ if(isset($_POST)) {
         }
     }
     
-    // Find all Menus
+ 
     $model = new MenusModel;
-    // All Menus
+    // Find all active Menus
     $menus = $model->getData("",array("IsEnabled"=>"1"));
+
+    $model = new MenuItemsModel;
+	//Find all active items based on active Menus
+    foreach($menus as $key_value){
+    	$items[] = $model->getData('',array("IsEnabled"=>"1", "Menu"=>$key_value['_id']));
+    }
+   	//Find all children of active items (if there are any)
+   	//TODO: Get all children items and make a master list of Menus/Items and their children
+    foreach($items as $menu){
+    	foreach($menu as $value){
+    		$links[] = $model->getData('',array("ParentItemID"=>$value['_id']));
+    	}
+    }
+
     
-    
-    
+
+        
+    	
     $view->template = 'Modules/Admin/Views/v_menus.html';
     $view->assign('thisaction', "$_SERVER[QUERY_STRING]");
     $view->register('js', 'ajax_functions.js');
     $view->pagetitle = "$shortappname :: Navigator Administrator";
     $view->assign('menus', $menus);
-
+    $view->assign('items', $items);
+} 
 ?>

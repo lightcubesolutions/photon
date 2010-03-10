@@ -1,3 +1,12 @@
+{literal}
+<script type="text/javascript">
+function fetchItems() {
+	var v = $("#menuname option:eq(0)").val();
+	loadAction("?a=menus&fetch=items&id="+$("#menuname").val(), "targetitems", false);
+}
+
+</script>
+{/literal}
 <div>
 
 	<h3>Add a New Menu</h3>
@@ -24,7 +33,7 @@
 			        <td><label>Item Name</label><br />
 			        <input type="text" name="Name" value="" /></td>
 			        <td><label>Menu</label><br />
-			        	<select id='menuname' name='MenuID'>
+			        	<select id='menuname' name='MenuID' onchange='fetchItems();'>
 								{foreach from=$menus item="row" name="row"}
 									<option value="{$row._id}">{$row.Name}</option>
 								{/foreach}
@@ -36,6 +45,7 @@
 								{/foreach}
 						</select>					
 					</td>
+					<td><div id='targetitems'></div></td>
 			    </tr>
 	        </table>
 	        <p>
