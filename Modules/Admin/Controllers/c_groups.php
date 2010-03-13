@@ -141,6 +141,6 @@ if (isset($_REQUEST['fetch'])) {
     $view->assign('thisaction', "$_SERVER[QUERY_STRING]");
     $view->assign('groups', $groups);
     $view->register('js', 'ajax_functions.js');
-    $view->pagetitle = "$shortappname :: Groups Administrator";
+    $view->pagetitle = "photon :: Groups Administrator";
 }
 ?>

@@ -117,7 +117,7 @@ if(!empty($_POST)) {
     $view->template = 'Modules/Admin/Views/v_menus.html';
     $view->assign('thisaction', "$_SERVER[QUERY_STRING]");
     $view->register('js', 'ajax_functions.js');
-    $view->pagetitle = "$shortappname :: Navigator Administrator";
+    $view->pagetitle = "photon :: Navigator Administrator";
     $view->assign('menus', $menus);
     $view->assign('items', $items);
     $view->assign('permobjs', $perms);

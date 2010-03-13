@@ -47,5 +47,5 @@ $users = $model->getData();
 $view->template = 'Modules/Admin/Views/v_users.html';
 $view->assign('thisaction', "$_SERVER[QUERY_STRING]");
 $view->assign('users', $users);
-$view->pagetitle = "$shortappname :: Users Administrator";
+$view->pagetitle = "photon :: Users Administrator";
 ?>

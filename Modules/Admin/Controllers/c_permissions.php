@@ -139,6 +139,6 @@ if (isset($_REQUEST['fetch'])) {
     $view->assign('thisaction', "$_SERVER[QUERY_STRING]");
     $view->assign('permobjs', $perms);
     $view->register('js', 'ajax_functions.js');
-    $view->pagetitle = "$shortappname :: Permissions Administrator";
+    $view->pagetitle = "photon :: Permissions Administrator";
 }
 ?>

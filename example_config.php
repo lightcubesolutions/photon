@@ -1,11 +1,5 @@
 <?php
 
-// Set global options and rename this file to config.php
-
-// Names
-$appname = 'LightCube photon';
-$shortappname = 'photon';
-
 // App key - should be a random string of Alphanumeric characters.
 $appkey = 'x2OpmMkHTay1';
 

@@ -42,6 +42,6 @@ $actions = $model->getData();
 $view->template = 'Modules/DevTools/Views/v_actions.html';
 $view->assign('thisaction', "$_SERVER[QUERY_STRING]");
 $view->assign('actions', $actions);
-$view->pagetitle = "$shortappname :: Actions Administrator";
+$view->pagetitle = "photon :: Actions Administrator";
 
 ?>
