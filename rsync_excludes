@@ -1,8 +1,0 @@
-.svn
-.project
-.buildpath
-config.php
-antconfig.txt
-build.xml
-rsync_excludes
-.settings
