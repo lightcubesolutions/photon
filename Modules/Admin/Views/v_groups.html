@@ -73,6 +73,7 @@ function fetchData() {
 	</div>
     <h3>All Groups</h3>
 	<div style="margin: 5px 0 10px 0;">
+		<form action="?{$thisaction}" id="groupsform" method="post" enctype="multipart/form-data"></form>
 		<table>
 			<thead>
 			  <tr>
@@ -82,17 +83,15 @@ function fetchData() {
 			  </tr>
 			</thead>
 			<tbody>
-                {foreach from=$groups item="row" key=k  name="row"}
-				<tr>
-				   <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
+                {foreach from=$groups item="row" name="row"}
+				<tr id="group_{$row._id}">
 					<td><input type='text' name='Name' value='{$row.Name}' /></td>
 					<td><input type='checkbox' name='IsEnabled' {if $row.IsEnabled == 1} checked="checked" {/if} /></td>
 					<td>
 					  <input type='hidden' name='_id' value='{$row._id}' />
-					  <input class='input_button' type='submit' name='update' value='Save' />&nbsp;
-					  <input class='input_button' type='submit' name='del' value='Delete' />
+					  <input class='input_button' type='button' value='Save' onclick="submitForm('update', 'group_{$row._id}', 'groupsform');" />&nbsp;
+					  <input class='input_button' type='button' value='Delete' onclick="submitForm('del', 'group_{$row._id}', 'groupsform');" />
 					</td>
-				   </form>
 				</tr>
                 {/foreach}
 			</tbody>

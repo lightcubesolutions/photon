@@ -13,35 +13,34 @@ defined("__photon") || die();
 $model = new ActionsModel;
 
 if(!empty($_POST)) {
-    $data = $_POST;
-
     $ui = new UITools;
     
     // Swap out values...
-    $data['IsEnabled'] = ($data['IsEnabled'] == 'on') ? '1' : '0';
+    $_POST['IsEnabled'] = ($_POST['IsEnabled'] == 'on') ? '1' : '0';
     
-    $model->data = $data;
+    $model->data = $_POST;
 
     if (isset($_POST['add'])) { 
         if ($model->add()) {
-           $ui->statusMsg('Successfully added the new action: '.$data['ActionName']);
+           $ui->statusMsg('Successfully added the new action: '.$_POST['ActionName']);
         } else {
            $ui->statusMsg($model->error, 'error');
         }    
     } elseif (isset($_POST['update'])) {
         $model->update();
-        $ui->statusMsg("Successfully updated the action: $data[ActionName]");
+        $ui->statusMsg("Successfully updated the action: $_POST[ActionName]");
     } elseif (isset($_POST['del'])) {
         $model->delete();
-        $ui->statusMsg("Successfully deleted the action: $data[ActionName]");
+        $ui->statusMsg("Successfully deleted the action: $_POST[ActionName]");
     }
 }
 
-$actions = $model->getData();
+$actions = $model->getData(array('Module'=>1, 'ActionName'=>1));
 
 $view->template = 'Modules/DevTools/Views/v_actions.html';
 $view->assign('thisaction', "$_SERVER[QUERY_STRING]");
 $view->assign('actions', $actions);
+$view->register('js', 'photon.js');
 $view->pagetitle = "photon :: Actions Administrator";
 
 ?>

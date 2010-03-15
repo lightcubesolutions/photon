@@ -164,8 +164,7 @@ class Dispatcher
                 $view->assign('loggedin', false);
                 $view->assign('loginkey', $_SESSION['key']);
                 $view->register('js', 'sha1.js');
-                $view->register('js', 'ajax_functions.js');
-                $view->register('js', 'login.js');
+                $view->register('js', 'photon.js');
             } else {
                 // Set up the logout link
                 $view->assign('loggedin', true);

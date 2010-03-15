@@ -138,7 +138,7 @@ if (isset($_REQUEST['fetch'])) {
     $view->template = 'Modules/Admin/Views/v_permissions.html';
     $view->assign('thisaction', "$_SERVER[QUERY_STRING]");
     $view->assign('permobjs', $perms);
-    $view->register('js', 'ajax_functions.js');
+    $view->register('js', 'photon.js');
     $view->pagetitle = "photon :: Permissions Administrator";
 }
 ?>

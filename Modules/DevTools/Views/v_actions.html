@@ -37,6 +37,7 @@
 	<div style="margin-top: 10px;">
         <h3>All Actions</h3>
 		<div id='qresults'>
+			<form action="?{$thisaction}" id="actionsform" method="post" enctype="multipart/form-data"></form>
 			<table id='results'>
 				<thead>
 				  <tr>
@@ -49,9 +50,8 @@
 				  </tr>
 				</thead>
 				<tbody>
-                    {foreach from=$actions item="row" key=k  name="row"}
-					<tr class='actioninfo' id='actioninfo_{$row.ActionName}'>
-					   <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
+                    {foreach from=$actions item="row" name="row"}
+					<tr id='action_{$row._id}'>
 						<td><input type='text' name='ActionName' value='{$row.ActionName}' /></td>
                         <td><input type='text' name='Module' value='{$row.Module}' /></td>
                         <td><input type='text' name='Controller' value='{$row.Controller}' /></td>
@@ -59,10 +59,9 @@
 						<td><input type='checkbox' name='IsEnabled' {if $row.IsEnabled == 1} checked="checked" {/if} /></td>
 						<td>
 						  <input type='hidden' name='_id' value='{$row._id}' />
-						  <input class='input_button' type='submit' name='update' value='Save' />&nbsp;
-						  <input class='input_button' type='submit' name='del' value='Delete' />
+						  <input class='input_button' type='button' value='Save' onclick="submitForm('update', 'action_{$row._id}', 'actionsform');" />&nbsp;
+						  <input class='input_button' type='button' value='Delete' onclick="submitForm('del', 'action_{$row._id}', 'actionsform');" />
 						</td>
-					   </form>
 					</tr>
                     {/foreach}
 				</tbody>

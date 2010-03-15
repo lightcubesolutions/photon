@@ -1,10 +1,11 @@
 /**
- * ajax_functions.js
- *
- * @package RBC Project
- * @version 1.0
+ * photon.js
+ * Common JavaScript functions for photon, e.g., AJAX controls and login.
+ * @package photon
+ * @version 1.0-a
  * @author LightCube Solutions <info@lightcubesolutions.com>
- * @copyright LightCube Solutions, LLC. 2009
+ * @copyright LightCube Solutions, LLC. 2010
+ * @license http://www.lightcubesolutions.com/LICENSE
  */
 
 var xmlHttp;    // The XML HTTP Request Object
@@ -154,4 +155,26 @@ function removeModal()
     if (m != '' && m != null) {
         document.body.removeChild(m);
     }
+}
+
+function login() {
+	var p = hex_sha1(document.getElementById("pass").value);
+	var k = document.getElementById("key").value;
+	var h = hex_sha1(k+p);
+	var u = document.getElementById("user").value;
+	loadAction("?a=login&h="+h+"&u="+u, "login_status", true);
+}
+
+function submitForm(task, id, formName)
+{
+	$("#"+formName).hide();	
+	jQuery.each(['input','select','textarea'], function(){
+		$("#"+id).find(''+this).each(function(){
+			if (this.type != 'button') {
+				$(this).clone().appendTo("#"+formName);
+			}
+		});
+	});
+	$("#"+formName).append($('<input type="hidden" name="'+task+'" value="'+task+'" />'));
+	$("#"+formName).submit();
 }

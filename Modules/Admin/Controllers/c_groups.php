@@ -140,7 +140,7 @@ if (isset($_REQUEST['fetch'])) {
     $view->template = 'Modules/Admin/Views/v_groups.html';
     $view->assign('thisaction', "$_SERVER[QUERY_STRING]");
     $view->assign('groups', $groups);
-    $view->register('js', 'ajax_functions.js');
+    $view->register('js', 'photon.js');
     $view->pagetitle = "photon :: Groups Administrator";
 }
 ?>
