@@ -1,71 +1,57 @@
-  <div>
-    <p>The management of individual actions here is intended mainly for Developers.
-    This allows a quick and easy way to configure the necessary data in the database to
-    control action mappings. Administrators will be more interested in assigning defined
-    groups of actions (modules) to individual users or groups of users. This will be
-    controlled through a different interface.</p>
-    <p>As we develop actions and action controllers, keep in mind that our setup and the
-    tools we use does not require a 1:1:1 relationship between actions, controllers and
-    html files. A single controller could belong to several actions, since it can
-    parse the value of the $_REQUEST['a'] field and handle accordingly. Templates can
-    also be specified dynamically.</p>
-	<div>
-        <h3>Add a New Action</h3>
-	    <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
-	        <table>
-	            <tr>
-			        <td><label>Action Name</label></td>
-			        <td><label>Module</label></td>
-			        <td><label>Controller</label></td>
-	                <td><label>Enabled</label></td>
-			    </tr>
-			    <tr>
-			    	<td><input type="text" name="ActionName" value="" /></td>
-                    <td><input type="text" name="Module" value="" /></td>
-                    <td><input type="text" name="Controller" value="" /></td>
-			    	<td><input type="checkbox" name="IsEnabled" /></td>
-			    </tr>
-			    <tr>
-			        <td colspan='4'>
-		                <input class="input_button" type="submit" name="add" value="Add" />
-		                <input class="input_button" type="reset" value="Reset" />			        
-			        </td>
-			    </tr>
-	        </table>
-	    </form>    
-	</div>
-	<div style="margin-top: 10px;">
-        <h3>All Actions</h3>
-		<div id='qresults'>
-			<form action="?{$thisaction}" id="actionsform" method="post" enctype="multipart/form-data"></form>
-			<table id='results'>
-				<thead>
-				  <tr>
-					<th>Action Name</th>
-					<th>Module</th>
-					<th>Controller</th>
-                    <th>Description</th>
-					<th>Enabled</th>
-					<th></th>
-				  </tr>
-				</thead>
-				<tbody>
-                    {foreach from=$actions item="row" name="row"}
-					<tr id='action_{$row._id}'>
-						<td><input type='text' name='ActionName' value='{$row.ActionName}' /></td>
-                        <td><input type='text' name='Module' value='{$row.Module}' /></td>
-                        <td><input type='text' name='Controller' value='{$row.Controller}' /></td>
-                        <td><input type='text' name='Description' value='{$row.Description}' /></td>
-						<td><input type='checkbox' name='IsEnabled' {if $row.IsEnabled == 1} checked="checked" {/if} /></td>
-						<td>
-						  <input type='hidden' name='_id' value='{$row._id}' />
-						  <input class='input_button' type='button' value='Save' onclick="submitForm('update', 'action_{$row._id}', 'actionsform');" />&nbsp;
-						  <input class='input_button' type='button' value='Delete' onclick="submitForm('del', 'action_{$row._id}', 'actionsform');" />
-						</td>
-					</tr>
-                    {/foreach}
-				</tbody>
-			</table>
-		</div>
-    </div>
-</div>
+<h3>Add a New Action</h3>
+<form action="?{$thisaction}" method="post" enctype="multipart/form-data">
+    <fieldset class="single">
+        <table>
+            <tr>
+                <td><label>Action Name</label></td>
+                <td><label>Module</label></td>
+                <td><label>Controller</label></td>
+                <td><label>Enabled</label></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="ActionName" value="" /></td>
+                <td><input type="text" name="Module" value="" /></td>
+                <td><input type="text" name="Controller" value="" /></td>
+                <td><input type="checkbox" name="IsEnabled" /></td>
+            </tr>
+        </table>
+    </fieldset>  
+    <input class="input_button add" type="submit" name="add" title="Add" value=" " />
+    <input class="input_button reset" type="reset" title="Reset Form" value=" " />
+</form>    
+
+{if $actions}
+<hr />
+<h3>All Actions</h3>
+<form action="?{$thisaction}" id="actionsform" method="post" enctype="multipart/form-data"></form>
+<fieldset class="multiple">
+    <table id='results'>
+	    <thead>
+			<tr>
+                <th>Action Name</th>
+                <th>Module</th>
+                <th>Controller</th>
+                <th>Description</th>
+                <th>Enabled</th>
+                <th></th>
+			</tr>
+	    </thead>
+        <tbody>
+            {foreach from=$actions item="row" name="row"}
+            <tr id='action_{$row._id}'>
+                <td><input type='text' name='ActionName' value='{$row.ActionName}' /></td>
+                <td><input type='text' name='Module' value='{$row.Module}' /></td>
+                <td><input type='text' name='Controller' value='{$row.Controller}' /></td>
+                <td><input type='text' name='Description' value='{$row.Description}' /></td>
+                <td><input type='checkbox' name='IsEnabled' {if $row.IsEnabled == 1} checked="checked" {/if} /></td>
+                <td>
+                    <input type='hidden' name='_id' value='{$row._id}' />
+                    <input class='input_button apply' title="Save" type='button' onclick="submitForm('update', 'action_{$row._id}', 'actionsform');" />&nbsp;
+                    <input class='input_button delete' title="Delete" type='button' onclick="submitForm('del', 'action_{$row._id}', 'actionsform');" />
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+</fieldset>
+{/if}

@@ -171,7 +171,9 @@ function submitForm(task, id, formName)
 	jQuery.each(['input','select','textarea'], function(){
 		$("#"+id).find(''+this).each(function(){
 			if (this.type != 'button') {
-				$(this).clone().appendTo("#"+formName);
+				var clone = $(this).clone();
+				clone.val($(this).val());
+				clone.appendTo("#"+formName);
 			}
 		});
 	});

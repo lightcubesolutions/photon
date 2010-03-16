@@ -1,8 +1,5 @@
-<label>Parent Item</label><br />
-<select id='parentitems' name='ParentItemID'>
 		<option value='removeme'>Choose a Parent Item...</option>
 		<option value="noparent">No Parent</option>
 		{foreach from=$items item="row" name="row"}
 			<option value="{$row._id}">{$row.Name}</option>
 		{/foreach}
-</select>			

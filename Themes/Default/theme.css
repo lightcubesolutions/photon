@@ -68,7 +68,9 @@ img.right {
 }
 
 hr {
-	display: none;
+	border: none;
+	border-top: 1px dashed #bbbbbb;
+	margin: 20px 0;
 }
 
 .list1 {
@@ -375,6 +377,32 @@ hr {
 #sidebar a {
 	color: #696969;
 }
+
+fieldset.single {
+	border: 1px solid #cccccc;
+	background: #ffffdd;
+	padding: 10px;
+	margin: 5px 0;
+}
+
+fieldset.multiple {
+	border: 1px solid #cccccc;
+	padding: 10px;
+	margin: 5px 0;
+}
+
+input.input_button {
+	width: 20px;
+	height: 20px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+}
+
+input.apply { background: url('images/apply.png') no-repeat; }
+input.delete { background: url('images/delete.png') no-repeat; }
+input.add { background: url('images/add.png') no-repeat; }
+input.reset { background: url('images/reset.png') no-repeat; }
 
 /* Footer */
 #footer {

@@ -1,62 +1,120 @@
 {literal}
 <script type="text/javascript">
-function fetchItems() {
-	var v = $("#menuname option:eq(0)").val();
-	if (v == 'removeme') { $("#menuname option:eq(0)").remove() };
-	loadAction("?a=menus&fetch=items&id="+$("#menuname").val(), "targetitems", false);
+function fetchItems(id, target) {
+	var v = $("#"+id+" option:eq(0)").val();
+	if (v == 'removeme') { $("#"+id+" option:eq(0)").remove() };
+	loadAction("?a=menus&fetch="+target+"&id="+$("#"+id).val(), target, false);
 }
-$(document).ready(fetchItems());
 </script>
 {/literal}
-<div>
 
-	<h3>Add a New Menu</h3>
-	<div style="margin: 5px 0 10px 0;">
-	    <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
-	        <table>
-	            <tr>
-			        <td><label>Menu Name</label><br /><input type="text" name="Name" value="" /></td>
-			    </tr>
-	        </table>
-	        <p>
-	            <input class="input_button" type="submit" name="add" value="Add" />
-	            <input class="input_button" type="reset" value="Reset" />
-	            <input type="hidden" name="IsEnabled" value="1" />
-	            <input type="hidden" name="IsMenu" value="1" />
-	        </p>
-	    </form>
-	</div>
-		<h3>Add a New Menu Item</h3>
-	<div style="margin: 5px 0 10px 0;">
-	    <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
-	        <table>
-	            <tr>
-			        <td><label>Item Name</label><br />
-			        <input type="text" name="Name" value="" /></td>
-			        <td><label>Menu</label><br />
-			        	<select id='menuname' name='MenuID' onchange='fetchItems();'>
-			        		<option value='removeme'>Choose a Menu...</option>
-								{foreach from=$menus item="row" name="row"}
-									<option value="{$row._id}">{$row.Name}</option>
-								{/foreach}
-						</select>				        
-					<td><label>Action</label><br />
-						<select id='actionname' name='Action'>
-							<option value='removeme'>Choose an Action...</option>
-								{foreach from=$permobjs item="row" name="row"}
-									<option value="{$row._id}">{$row.module}/{$row.Name}</option>
-								{/foreach}
-						</select>					
-					</td>
-					<td><div id='targetitems'></div></td>
-			    </tr>
-	        </table>
-	        <p>
-	            <input class="input_button" type="submit" name="add" value="Add" />
-	            <input class="input_button" type="reset" value="Reset" />
-	            <input type="hidden" name="IsEnabled" value="1" />
-	            <input type="hidden" name="IsItem" value="1" />
-	        </p>
-	    </form>
-	</div>
-</div>
+<h3>Create a New Menu</h3>
+<form action="?{$thisaction}" method="post" enctype="multipart/form-data">
+	<fieldset class="single">
+        <table>
+            <tr>
+                <td>
+                    <label>Menu Name:</label><br />
+                    <input type="text" name="Name" value="" />
+                </td>
+                <td>
+                    <label>Enabled?</label><br />
+                    <input type="checkbox" name="IsEnabled" />
+                </td>
+            </tr>
+        </table>
+	</fieldset>
+    <input type="hidden" name="type" value="menu" />
+	<input class="input_button add" type="submit" name="add" value=" " title="Add" />
+	<input class="input_button reset" type="reset" value=" "  title="Reset Form" />
+</form>
+
+{if $menus}
+<hr />
+<h3>Current Menus</h3>
+<form action="?{$thisaction}" id="menusform" method="post" enctype="multipart/form-data"></form>
+<fieldset class="multiple">
+    <table>
+        <thead>
+            <tr>
+                <th>Menu Name</th>
+                <th>Enabled?</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach from=$menus item="row" name="row"}
+            <tr id='menu_{$row._id}'>
+                <td><input type='text' name='Name' value='{$row.Name}' /></td>
+                <td><input type='checkbox' name='IsEnabled' {if $row.IsEnabled == 1} checked="checked" {/if} /></td>
+                <td>
+                    <input type='hidden' name='_id' value='{$row._id}' />
+                    <input type="hidden" name="type" value="menu" />
+                    <input class='input_button apply' type='button' title='Save' onclick="submitForm('update', 'menu_{$row._id}', 'menusform');" />&nbsp;
+                    <input class='input_button delete' type='button' title='Delete' onclick="submitForm('del', 'menu_{$row._id}', 'menusform');" />
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+</fieldset>
+
+<hr />
+
+<h3>Add a New Menu Item</h3>
+<form action="?{$thisaction}" method="post" enctype="multipart/form-data">
+    <fieldset class="single">
+        <table>
+            <tr>
+                <td><label>Item Name</label><br />
+                <input type="text" name="Name" value="" /></td>
+                <td><label>Menu</label><br />
+                	<select id='selectMenu1' name='MenuID' onchange='fetchItems(this.id, "possibleItems");'>
+                		<option value='removeme'>Choose a Menu...</option>
+            			{foreach from=$menus item="row" name="row"}
+            			<option value="{$row._id}">{$row.Name}</option>
+            			{/foreach}
+                	</select>				        
+                <td><label>Action</label><br />
+                	<select id='actionname' name='ActionID'>
+                		<option value='removeme'>Choose an Action...</option>
+            			{foreach from=$permobjs item="row" name="row"}
+            			<option value="{$row._id}">{$row.module}/{$row.Name}</option>
+            			{/foreach}
+                	</select>					
+                </td>
+                <td>
+                    <label>Parent Item</label><br />
+                    <select id='possibleItems' name='ParentItemID'>
+                        <option value='removeme'>Choose a Parent Item...</option>
+                    </select>
+                </td>
+                <td><label>Enabled?</label><br /><input type='checkbox' name='IsEnabled' /></td>
+            </tr>
+        </table>
+    </fieldset>
+    <input class="input_button add" type="submit" name="add" value=" " title="Add" />
+    <input class="input_button reset" type="reset" value=" " title="Reset Form" />
+    <input type="hidden" name="type" value="item" />
+</form>
+
+<hr />
+
+<h3>Current Menu Items</h3>
+<form action="?{$thisaction}" id="menuitemsform" method="post" enctype="multipart/form-data"></form>
+<fieldset class="multiple">
+    <legend>
+        <select id="selectMenu2" onchange='fetchItems(this.id, "currentItems");'>
+            {foreach from=$menus item="row" name="row"}
+            <option value="{$row._id}">{$row.Name}</option>
+            {/foreach}
+        </select>
+    </legend>
+    <div id="currentItems"></div>
+</fieldset>
+{literal}
+<script>
+$(document).ready(function(){ fetchItems('selectMenu2', 'currentItems'); });
+</script>
+{/literal}
+{/if}

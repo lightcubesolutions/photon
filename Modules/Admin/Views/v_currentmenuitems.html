@@ -1,0 +1,54 @@
+{if $items}
+<table>
+    <thead>
+        <tr>
+            <th>Item Name</th>
+            <th>Menu</th>
+            <th>Action</th>
+            <th>Parent Item</th>
+            <th>Enabled?</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach from=$items item="row"}
+        <tr id='menuitem_{$row._id}'>
+            <td><input type='text' name='Name' value='{$row.Name}' /></td>
+            <td>
+                <select name="MenuID">
+                    {foreach from=$menus item="menu"}
+                    <option value="{$menu._id}" {if $menu._id|lower eq $row.MenuID|lower} selected="selected"{/if} >{$menu.Name}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <select name="ActionID">
+                    {foreach from=$actions item="action"}
+                    <option value="{$action._id}" {if $action._id|lower eq $row.ActionID|lower} selected="selected"{/if} >{$action.ActionName}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <select name="ParentItemID">
+                    <option value="noparent" {if $row.ParentItemID == 'noparent'} selected="selected"{/if}>No Parent</option>
+                    {foreach from=$items item="item"}
+                    {if $row._id|lower != $item._id}
+                    <option value="{$item._id}" {if $item._id|lower eq $row.ParentItemID|lower} selected="selected"{/if}>{$item.Name}</option>
+                    {/if}
+                    {/foreach}
+                </select>            
+            </td>
+            <td><input type='checkbox' name='IsEnabled' {if $row.IsEnabled == 1} checked="checked" {/if} /></td>
+            <td>
+                <input type='hidden' name='_id' value='{$row._id}' />
+                <input type='hidden' name='type' value='item' />
+                <input class='input_button apply' type='button' title='Save' onclick="submitForm('update', 'menuitem_{$row._id}', 'menuitemsform');" />&nbsp;
+                <input class='input_button delete' type='button' title='Delete' onclick="submitForm('del', 'menuitem_{$row._id}', 'menuitemsform');" />
+            </td>
+        </tr>
+        {/foreach}
+    </tbody>
+</table>
+{else}
+<p>No items currently assigned to this menu.</p>
+{/if}
