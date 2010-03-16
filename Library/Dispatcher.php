@@ -21,11 +21,86 @@ class Dispatcher
     private $_action;
     private $_module;
     
+    /**
+     * _grantaccess function
+     * sets the controller, action and status to grant permission to the resource
+     * @access private
+     * @return void
+     */
     private function _grantaccess()
     {
         $this->status = true;
         $this->controller = "Modules/$this->_module/Controllers/".$this->_action['Controller'];
         $this->action = $this->_action['ActionName'];
+    }
+    
+    /**
+     * checkAccess function
+     * Determines if a user has access to a requested action
+     * @access public
+     * @param string $action
+     * @return boolean
+     */
+    public function checkAccess($action)
+    {
+        $retval = false;
+        
+        $id = (isset($_SESSION['Userid'])) ? $_SESSION['Userid'] : '0';
+        
+        // 1. Find the Action
+        $model = new ActionsModel;
+        $this->_action = $model->col->findOne(array('ActionName'=>$action,'IsEnabled'=>'1'));
+        // FIXME: Before starting down this road, a check should be made if the user is not logged in, just find if the action is public.
+        if (!empty($this->_action)) {
+            $this->_module = $this->_action['Module'];
+            $pmodel = new PermissionsModel;
+              
+            // 2. Has Permission been set explicitly for this user?
+            $access = $pmodel->col->findOne(array('Subject'=>$id, 'ActionName'=>$this->_action['ActionName']));
+            
+            if (empty($access)) {
+                
+                // No direct permission
+                // 3. Does this user have permission to the whole Module?
+                $access = $pmodel->col->findOne(array('Subject'=>$id, 'Module'=>$this->_module, 'ActionName'=>array('$exists'=>false)));
+                
+                if (empty($access)) {
+                    
+                    // No User permission on module
+                    // 4. Do any of my groups have permissions?
+                    $model = new UsersModel;
+                    $mygroups = $model->getGroups($id);
+                    if ($mygroups) {
+                        $myparents = array();
+                        $model = new GroupsModel;
+                        foreach ($mygroups as $group) {
+                            $parents = $model->getParents($group);
+                            if ($parents) {
+                                $myparents = array_merge($myparents, $parents);
+                            }
+                        }
+                        if (!empty($myparents)) {
+                            foreach ($myparents as $group) {
+                                // Check if direct permission is set on action
+                                $access = $pmodel->col->findOne(array('Subject'=>$group, 'ActionName'=>$this->_action['ActionName']));
+                                // Check if permission is set on entire module
+                                if (empty($access)) {
+                                    $access = $pmodel->col->findOne(array('Subject'=>$group, 'Module'=>$this->_module, 'ActionName'=>array('$exists'=>false)));
+                                }
+                                if (!empty($access)) {
+                                    break;
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (!empty($access)) {
+            $retval = true;
+        }
+        return $retval;
     }
  
     /**
@@ -36,7 +111,7 @@ class Dispatcher
      * @param mixed $request
      * @return void
      */
-    function parse($request)
+    public function parse($request)
     {
         $this->status = false;
         $user_request = NULL;
@@ -45,8 +120,6 @@ class Dispatcher
         }
         
         $db = new MongoDBHandler;
-
-        $id = (isset($_SESSION['Userid'])) ? $_SESSION['Userid'] : '0';
         
         // Check to see if the user requested the special 'login' or 'logout'.
         switch ($user_request) {
@@ -57,58 +130,7 @@ class Dispatcher
                 break;
             default:
                 // Determine if the user has access.
-                // 1. Find the Action. FIXME: Ensure the action is enabled.
-                $model = new ActionsModel;
-                $this->_action = $model->col->findOne(array('ActionName'=>$user_request,'IsEnabled'=>'1'));
-                
-                // Before starting down this road, a check should be made if the user is not logged in, just find if the action is public.
-                if (!empty($this->_action)) {
-                    $this->_module = $this->_action['Module'];
-                    $pmodel = new PermissionsModel;
-                      
-                    // 2. Has Permission been set explicitly for this user?
-                    $access = $pmodel->col->findOne(array('Subject'=>$id, 'ActionName'=>$this->_action['ActionName']));
-                    
-                    if (empty($access)) {
-                        
-                        // No direct permission
-                        // 3. Does this user have permission to the whole Module?
-                        $access = $pmodel->col->findOne(array('Subject'=>$id, 'Module'=>$this->_module, 'ActionName'=>array('$exists'=>false)));
-                        
-                        if (empty($access)) {
-                            
-                            // No User permission on module
-                            // 4. Do any of my groups have permissions?
-                            $model = new UsersModel;
-                            $mygroups = $model->getGroups($id);
-                            if ($mygroups) {
-                                $myparents = array();
-                                $model = new GroupsModel;
-                                foreach ($mygroups as $group) {
-                                    $parents = $model->getParents($group);
-                                    if ($parents) {
-                                        $myparents = array_merge($myparents, $parents);
-                                    }
-                                }
-                                if (!empty($myparents)) {
-                                    foreach ($myparents as $group) {
-                                        // Check if direct permission is set on action
-                                        $access = $pmodel->col->findOne(array('Subject'=>$group, 'ActionName'=>$this->_action['ActionName']));
-                                        // Check if permission is set on entire module
-                                        if (empty($access)) {
-                                            $access = $pmodel->col->findOne(array('Subject'=>$group, 'Module'=>$this->_module, 'ActionName'=>array('$exists'=>false)));
-                                        }
-                                        if (!empty($access)) {
-                                            break;
-                                        }
-                                        
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (!empty($access)) {
+                if ($this->checkAccess($user_request)) {
                     $this->_grantaccess();
                 }
                 break;
@@ -120,7 +142,7 @@ class Dispatcher
      * handles the specified request, by pulling in the appropriate controller
      * @return void
      */
-    function dispatch()
+    public function dispatch()
     {
         global $auth, $view;
         if (!empty($this->special)) {
