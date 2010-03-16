@@ -1,52 +1,67 @@
-<div>
-	<h3>Add a New User</h3>
-	<div>
-	    <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
-	        <table>
-	            <tr>
-			        <td><label>Username</label><br /><input type="text" name="Username" value="" /></td>
-			        <td><label>First Name</label><br /><input type="text" name="FirstName" value="" /></td>
-	                <td><label>Last Name</label><br /><input type="text" name="LastName" value="" /></td>
-	                <td><label>Password</label><br /><input type="password" name="Password" value="" /></td>
-	                <td><label>Confirm Password</label><br /><input type="password" name="confirm" value="" /></td>
-			    </tr>
-	        </table>
-	        <p>
-	            <input class="input_button" type="submit" name="add" value="Add" />
-	            <input class="input_button" type="reset" value="Reset" />
-	            <input type="hidden" name="IsEnabled" value="on" />
-	        </p>
-	    </form>
-	</div>
-    <h3>All Users</h3>
-	<div id='qresults'>
-		<form action="?{$thisaction}" id="usersform" method="post" enctype="multipart/form-data">
-		<table id='results'>
-			<thead>
-			  <tr>
-				<th>Username</th>
-				<th>First Name</th>
-				<th>Last Name</th>
-				<th>Enabled</th>
-				<th></th>
-			  </tr>
-			</thead>
-			<tbody>
-                {foreach from=$users item="row" name="row"}
-				<tr id='user_{$row._id}'>
-					<td><input type='text' name='Username' value='{$row.Username}' /></td>
-                       <td><input type='text' name='FirstName' value='{$row.FirstName}' /></td>
-                       <td><input type='text' name='LastName' value='{$row.LastName}' /></td>
-					<td><input type='checkbox' name='IsEnabled' {if $row.IsEnabled == 1} checked="checked" {/if} /></td>
-					<td>
-					  <input type='hidden' name='_id' value='{$row._id}' />
-					  <input class='input_button' type='button' value='Save' onclick="submitForm('update', 'user_{$row._id}', 'usersform');" />&nbsp;
-					  <input class='input_button' type='button' value='Delete'  onclick="submitForm('del', 'user_{$row._id}', 'usersform');" />
-					</td>
-				   </form>
-				</tr>
-                {/foreach}
-			</tbody>
-		</table>
-	</div>
-</div>
+<h3>Add a New User</h3>
+<form action="?{$thisaction}" method="post" enctype="multipart/form-data">
+    <fieldset class="single">
+        <table>
+            <tr>
+                <td class="right"><label>Username:</label></td>
+                <td><input type="text" name="Username" value="" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label>First Name:</label></td>
+                <td><input type="text" name="FirstName" value="" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label>Last Name:</label></td>
+                <td><input type="text" name="LastName" value="" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label>Password:</label></td>
+                <td><input type="password" name="Password" value="" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label>Confirm Password:</label></td>
+                <td><input type="password" name="confirm" value="" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label>Enabled?</label></td>
+                <td><input type="checkbox" name="IsEnabled" /></td>
+            </tr>
+        </table>
+    </fieldset>
+    <input class="input_button add" type="submit" name="add" value=" " title="Add" />
+    <input class="input_button reset" type="reset" value=" " title="Reset Form" />
+</form>
+
+{if $users}
+<hr />
+<h3>All Users</h3>
+<form action="?{$thisaction}" id="usersform" method="post" enctype="multipart/form-data"></form>
+<fieldset class="multiple">
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Enabled?</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach from=$users item="row" name="row"}
+            <tr id='user_{$row._id}'>
+                <td><input type='text' name='Username' value='{$row.Username}' /></td>
+                <td><input type='text' name='FirstName' value='{$row.FirstName}' /></td>
+                <td><input type='text' name='LastName' value='{$row.LastName}' /></td>
+                <td><input type='checkbox' name='IsEnabled' {if $row.IsEnabled == 1} checked="checked" {/if} /></td>
+                <td>
+                    <input type='hidden' name='_id' value='{$row._id}' />
+                    <input class='input_button apply' type='button' title='Save' onclick="submitForm('update', 'user_{$row._id}', 'usersform');" />&nbsp;
+                    <input class='input_button delete' type='button' title='Delete'  onclick="submitForm('del', 'user_{$row._id}', 'usersform');" />
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+</fieldset>
+{/if}

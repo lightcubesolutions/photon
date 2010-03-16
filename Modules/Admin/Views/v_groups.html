@@ -29,74 +29,71 @@ function fetchData() {
 }
 </script>
 {/literal}
-            
-<div>
 
-	<h3>Assign Subjects to a Group</h3>
-	<p>Begin by choosing a group to modify from the drop-down menu below.</p>
-	<div style="margin: 5px 0 10px 0;">
-		<div style="margin-right: 3px; float: left; width: 350px;">
-			<select id='groupname' name='Name' onchange='fetchData();'>
-				<option value='removeme'>Choose a Group...</option>
-				{foreach from=$groups item="row" name="row"}
-				<option value="{$row._id}">{$row.Name}</option>
-				{/foreach}
-			</select>
-		</div>
-		<div style="margin-right: 3px; float: left; width: 350px;">
-			<span style="margin: 5px;">Available Subjects:</span>
-		</div>
-		<div style="clear: both;"></div>
-		<div style="margin-right: 3px; float: left; width: 350px; overflow: auto; height: 300px; border: 1px solid silver;">
-		    <ul id="targets"></ul>
-		</div>
-		<div style="margin-right: 3px; float: left; width: 350px; overflow: auto; height: 300px; border: 1px solid silver;">
-		    <ul id="subjects"></ul>
-		</div>
-		<div style="clear: both;"></div>
-    </div>
-
-	<h3>Add a New Group</h3>
-	<div style="margin: 5px 0 10px 0;">
-	    <form action="?{$thisaction}" method="post" enctype="multipart/form-data">
-	        <table>
-	            <tr>
-			        <td><label>Group Name</label><br /><input type="text" name="Name" value="" /></td>
-			    </tr>
-	        </table>
-	        <p>
-	            <input class="input_button" type="submit" name="add" value="Add" />
-	            <input class="input_button" type="reset" value="Reset" />
-	            <input type="hidden" name="IsEnabled" value="on" />
-	        </p>
-	    </form>
-	</div>
-    <h3>All Groups</h3>
-	<div style="margin: 5px 0 10px 0;">
-		<form action="?{$thisaction}" id="groupsform" method="post" enctype="multipart/form-data"></form>
-		<table>
-			<thead>
-			  <tr>
-				<th>Group Name</th>
-				<th>Enabled</th>
-				<th></th>
-			  </tr>
-			</thead>
-			<tbody>
-                {foreach from=$groups item="row" name="row"}
-				<tr id="group_{$row._id}">
-					<td><input type='text' name='Name' value='{$row.Name}' /></td>
-					<td><input type='checkbox' name='IsEnabled' {if $row.IsEnabled == 1} checked="checked" {/if} /></td>
-					<td>
-					  <input type='hidden' name='_id' value='{$row._id}' />
-					  <input class='input_button' type='button' value='Save' onclick="submitForm('update', 'group_{$row._id}', 'groupsform');" />&nbsp;
-					  <input class='input_button' type='button' value='Delete' onclick="submitForm('del', 'group_{$row._id}', 'groupsform');" />
-					</td>
-				</tr>
-                {/foreach}
-			</tbody>
-		</table>
-	</div>
-
+{if $groups}
+<h3>Assign Subjects to a Group</h3>
+<div style="margin-right: 3px; float: left; width: 350px;">
+	<select id='groupname' name='Name' onchange='fetchData();'>
+		<option value='removeme'>Choose a Group...</option>
+		{foreach from=$groups item="row" name="row"}
+		<option value="{$row._id}">{$row.Name}</option>
+		{/foreach}
+	</select>
 </div>
-<pre id="debug"></pre>
+<div style="margin-right: 3px; float: left; width: 350px;">
+	<span style="margin: 5px;">Available Subjects:</span>
+</div>
+<div style="clear: both;"></div>
+<div style="margin-right: 3px; float: left; width: 350px; overflow: auto; height: 300px; border: 1px solid silver;">
+    <ul id="targets"></ul>
+</div>
+<div style="margin-right: 3px; float: left; width: 350px; overflow: auto; height: 300px; border: 1px solid silver;">
+    <ul id="subjects"></ul>
+</div>
+<div style="clear: both;"></div>
+<hr />
+{/if}
+
+<h3>Add a New Group</h3>
+<form action="?{$thisaction}" method="post" enctype="multipart/form-data">
+    <fieldset class="single">
+        <table>
+            <tr>
+    	        <td><label>Group Name</label><br /><input type="text" name="Name" value="" /></td>
+                <td><label>Enabled?</label><br /><input type="checkbox" name="IsEnabled" /></td>
+    	    </tr>
+        </table>
+    </fieldset>  
+    <input class="input_button add" type="submit" name="add" value=" " title="Add" />
+    <input class="input_button reset" type="reset" value=" " title="Reset Form" />
+</form>
+
+{if $groups}
+<hr />
+<h3>All Groups</h3>
+<form action="?{$thisaction}" id="groupsform" method="post" enctype="multipart/form-data"></form>
+<fieldset class="multiple">
+    <table>
+    	<thead>
+            <tr>
+                <th>Group Name</th>
+                <th>Enabled</th>
+                <th></th>
+            </tr>
+    	</thead>
+    	<tbody>
+            {foreach from=$groups item="row" name="row"}
+    		<tr id="group_{$row._id}">
+    			<td><input type='text' name='Name' value='{$row.Name}' /></td>
+    			<td><input type='checkbox' name='IsEnabled' {if $row.IsEnabled == 1} checked="checked" {/if} /></td>
+    			<td>
+                    <input type='hidden' name='_id' value='{$row._id}' />
+                    <input class='input_button apply' type='button' title='Save' onclick="submitForm('update', 'group_{$row._id}', 'groupsform');" />&nbsp;
+                    <input class='input_button delete' type='button' title='Delete' onclick="submitForm('del', 'group_{$row._id}', 'groupsform');" />
+    			</td>
+    		</tr>
+            {/foreach}
+    	</tbody>
+    </table>
+</fieldset>
+{/if}

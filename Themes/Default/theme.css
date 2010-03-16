@@ -404,6 +404,8 @@ input.delete { background: url('images/delete.png') no-repeat; }
 input.add { background: url('images/add.png') no-repeat; }
 input.reset { background: url('images/reset.png') no-repeat; }
 
+td.right { text-align: right; }
+
 /* Footer */
 #footer {
 	width: 1000px;
