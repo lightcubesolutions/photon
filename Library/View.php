@@ -86,9 +86,10 @@ class View
      * 
      * @param $type
      * @param $path
+     * @acces public
      * @return unknown_type
      */
-    function register($type, $path)
+    public function register($type, $path)
     {
         switch (strtolower($type)) {
             case 'js':
@@ -101,7 +102,17 @@ class View
             default:
                 $this->media["Media/CSS/$path"] = 'css';
                 break;
-       } 
+       }
+    }
+    
+    private function _generateMenus()
+    {
+        // 1. Find all enabled menus
+        $model = new MenusModel;
+        $menus = $model->getData('', array('IsEnabled'=>'1'));
+        
+        // 2. Build out each menu
+        
     }
     
     /**
