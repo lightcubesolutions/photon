@@ -1,7 +1,7 @@
 <?php
 /**
  * MongoDBHandler Class
- * Manages all MongoDB  transactions. Collects returned data into easily
+ * Manages all MongoDB transactions. Collects returned data into easily
  * accessible arrays and reports all errors.
  *
  * @version 1.3

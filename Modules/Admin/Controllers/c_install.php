@@ -12,6 +12,7 @@ defined('__photon') || die();
 
 if (!empty($_POST)) {
     // Try DB connection
+    global $dbname, $dbpass, $dbuser;
     $dbname = $_POST['dbname'];
     $dbpass = $_POST['dbpass'];
     $dbuser = $_POST['dbuser'];
@@ -21,11 +22,11 @@ if (!empty($_POST)) {
     } else {
         // Check Username/Password
         if (empty($_POST['Username'])) {
-            $error = 'No Username supplied.';
+            $error = 'No Username for the Initial System User supplied.';
         } elseif (empty($_POST['Password']) || empty($_POST['confirm'])) {
-            $error = 'You must enter a password and confirm it.';
+            $error = 'You must enter a password for the Initial System User and confirm it.';
         } elseif ($_POST['Password'] != $_POST['confirm']) {
-            $error = 'User passwords do not match.';
+            $error = 'System User passwords do not match.';
         } else {
             // FIXME: Also perform password length/complexity checks
             // All appears good.
