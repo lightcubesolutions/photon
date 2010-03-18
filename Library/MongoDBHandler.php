@@ -42,10 +42,11 @@ class MongoDBHandler
         
         // Make the initial connection
         // FIXME: could probably allow for all the PHP options, here, like server URL, etc
-        $this->_link = new Mongo();
+        // TODO: Improve exception handling per issue #305
         
         // Select the DB
         try {
+        	$this->_link = new Mongo();
             $this->db = $this->_link->selectDB($this->dbname);
             // Authenticate
             $result = $this->db->authenticate($this->dbuser, $this->dbpass);
@@ -77,7 +78,7 @@ class MongoDBHandler
      * getData function - Return array of collection documents with optional sorting and filtering
      * @param array $sort
      * @param array $where
-     * @return array
+     * @return mixed
      */
     function getData($sort = array(), $where = array())
     {
@@ -86,14 +87,16 @@ class MongoDBHandler
         if ($this->_connected) {
                                     
             // Grab the data
-            $this->cursor = $this->col->find($where);
-
-            if ($this->cursor->count() > 0) {
-                $this->cursor->sort($sort);
-            	foreach($this->cursor as $obj){
+            $cursor = $this->getCursor($where);
+            //$this->cursor = $this->col->find($where);
+            if (is_object($cursor)) {
+                $cursor->sort($sort);
+            	foreach($cursor as $obj){
 					$retarray[] = $obj;
-				}
-            }
+				}			
+            }else{
+            	return false;
+            }           
         }
         return $retarray;
     }
@@ -104,16 +107,15 @@ class MongoDBHandler
      * 
      * @param string $path
      * @param array $info
-     * @return boolean
+     * @return mixed
      */
     function saveFile($path, $info = array())
     {
     	$retval = false;
     	// Only try if the connection and path has been established.
- 		
-    	if ($this->getGrid() && isset($path)){
-    		$this->fileid = $this->grid->storeFile($path, $info);
-    		$retval = true;
+ 		$grid = $this->getGrid();
+    	if (is_object($grid) && isset($path)){
+    		$retval = $grid->storeFile($path, $info);
     	}
     	return $retval;
     }
@@ -129,11 +131,11 @@ class MongoDBHandler
     {
     	$retval = false;
     	//Only try if the connection and where is set
-    	if ($this->getGrid() && isset($where))
+    	$grid = $this->getGrid();
+    	if (is_object($grid) && isset($where))
     	{
     		//Remove the file Mongo based on the $where param
-			$isRemoved = $this->grid->remove($where);
-			$retval = ($isRemoved == TRUE)? TRUE : FALSE;
+			$retval = ($grid->remove($where) == TRUE)? TRUE : FALSE;
     	}	
     	return $retval;
     }
@@ -148,10 +150,28 @@ class MongoDBHandler
     	$retval = false;
     	if ($this->_connected){
     		//Get GridFS Object
-    		$this->grid = $this->db->getGridFS();
-    		$retval = true;
+    		$retval = $this->db->getGridFS();
     	}
     	return $retval;
+    }
+    
+    /*
+     * getCursor function
+     * Gets the MongoDB cursor of a collection based on search criteria
+     * @return mixed
+     */
+ 	function getCursor($where = array())
+    {
+    	$retval = false;
+        // Only try if the connection has been established.
+        if ($this->_connected) {                       
+            // Grab the data            
+            $cursor = $this->col->find($where);
+            if ($cursor->count() > 0){
+            	$retval = $cursor;
+            }	
+        }
+		return $retval;
     }    
 }
 
