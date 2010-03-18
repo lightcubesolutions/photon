@@ -38,19 +38,21 @@ $dp = new Dispatcher;
 $auth = new Authentication;
 $view = new View;
 
+
 // Defined constant to prevent subfiles from being accessed directly.
 define('__photon', true);
 
 if (!file_exists('config.php')) {
     // Don't show the login form
     $view->assign('loggedin', true);
+    
     $auth->login_form = false;
     // Display the install form
     $dp->controller = 'Modules/Admin/Controllers/c_install.php';
     $dp->dispatch();
 } else {
     // Include site configuration.   
-    require('config.php');    
+    require('config.php');   
 
     // Start the PHP session
     session_name($appkey);
@@ -61,6 +63,14 @@ if (!file_exists('config.php')) {
     
     // Set the theme.
     $view->theme = $theme;
+    
+    // FIXME: Is this the best place for this?
+    if ($jquery) {
+        // Pull in the jquery and jquery-ui code.
+        $view->register('js', 'jquery-1.3.2.min.js');
+        $view->register('js', 'jquery-ui-1.7.2.custom.min.js');
+        $view->register('css', 'smoothness/jquery-ui-1.7.2.custom.css');
+    }
     
     // Set default TimeZone
     date_default_timezone_set($tz);

@@ -43,10 +43,9 @@ class MongoDBHandler
         // Make the initial connection
         // FIXME: could probably allow for all the PHP options, here, like server URL, etc
         // TODO: Improve exception handling per issue #305
-        
-        // Select the DB
         try {
-        	$this->_link = new Mongo();
+            $this->_link = new Mongo();
+            // Select the DB
             $this->db = $this->_link->selectDB($this->dbname);
             // Authenticate
             $result = $this->db->authenticate($this->dbuser, $this->dbpass);

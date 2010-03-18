@@ -129,6 +129,11 @@ if (!empty($_POST)) {
     }
 }
 
+// Pull in the jquery and jquery-ui code.
+$view->register('js', 'jquery-1.3.2.min.js');
+$view->register('js', 'jquery-ui-1.7.2.custom.min.js');
+$view->register('css', 'smoothness/jquery-ui-1.7.2.custom.css');
 $view->template = 'Modules/Admin/Views/v_install.html';
 $view->pagetitle = "photon :: Installation";
+
 ?>
