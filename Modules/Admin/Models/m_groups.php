@@ -11,6 +11,7 @@
 
 class GroupsModel extends Model
 {
+	protected $criteria;    //Search criteria for find	
 	/**
      * __construct function initializes collection name
      * @access public
@@ -27,11 +28,11 @@ class GroupsModel extends Model
 	 * FIXME: Add check for group loops?
 	 * @return boolean
 	 */
-	function add()
+	function add($data)
 	{
 		//Setup the criteria
-		$this->criteria = array('Name'=>$this->data['Name']);
-		return parent::add();
+		$this->criteria = array('Name'=>$data['Name']);
+		return parent::add($data);
 	}
 	
 	/**

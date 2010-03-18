@@ -23,21 +23,18 @@ if(!empty($_POST)) {
     if (isset($data['Password'])) {
         $data['Password'] = sha1($data['Password']);
         unset($data['confirm']);
-    }
-    
-    $model->data = $data;
-        
+    }   
     if (isset($_POST['add'])) {
-        if ($model->add()) {
+        if ($model->add($data)) {
            $ui->statusMsg('Successfully added the new user: '.$data['Username']);
         } else {
            $ui->statusMsg($model->error, 'error');
         }    
     } elseif (isset($_POST['update'])) {
-        $model->update();
+        $model->update($data);
         $ui->statusMsg("Successfully updated the user: $data[Username]");
     } elseif (isset($_POST['del'])) {
-        $model->delete();
+        $model->delete($data);
         $ui->statusMsg("Successfully deleted the user: $data[Username]");
     }
 }

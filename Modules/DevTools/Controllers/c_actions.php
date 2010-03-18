@@ -18,19 +18,19 @@ if(!empty($_POST)) {
     // Swap out values...
     $_POST['IsEnabled'] = ($_POST['IsEnabled'] == 'on') ? '1' : '0';
     
-    $model->data = $_POST;
+    $data = $_POST;
 
     if (isset($_POST['add'])) { 
-        if ($model->add()) {
+        if ($model->add($data)) {
            $ui->statusMsg('Successfully added the new action: '.$_POST['ActionName']);
         } else {
            $ui->statusMsg($model->error, 'error');
         }    
     } elseif (isset($_POST['update'])) {
-        $model->update();
+        $model->update($data);
         $ui->statusMsg("Successfully updated the action: $_POST[ActionName]");
     } elseif (isset($_POST['del'])) {
-        $model->delete();
+        $model->delete($data);
         $ui->statusMsg("Successfully deleted the action: $_POST[ActionName]");
     }
 }

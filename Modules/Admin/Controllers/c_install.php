@@ -33,12 +33,12 @@ if (!empty($_POST)) {
             $tz = $_POST['TZ'];
             // Add the initial user.
             $model = new UsersModel;
-            $model->data['Username'] = $_POST['Username'];
-            $model->data['Password'] = sha1($_POST['Password']);
-            $model->data['FirstName'] = $_POST['FirstName'];
-            $model->data['LastName'] = $_POST['LastName'];
-            $model->data['IsEnabled'] = '1';
-            $model->add();
+            $data['Username'] = $_POST['Username'];
+            $data['Password'] = sha1($_POST['Password']);
+            $data['FirstName'] = $_POST['FirstName'];
+            $data['LastName'] = $_POST['LastName'];
+            $data['IsEnabled'] = '1';
+            $model->add($data);
             // Fetch the new Users' ID
             $user = $model->col->findOne(array('Username'=>$_POST['Username']));
             $id = "$user[_id]";
@@ -47,8 +47,8 @@ if (!empty($_POST)) {
             $model = new PermissionsModel;
             $modules = array(0=>'Admin', 1=>'DevTools');
             foreach($modules as $module) {
-                $model->data = array('Subject'=>$id, 'SubjectType'=>'user', 'Module'=>$module);
-                $model->add();
+                $data = array('Subject'=>$id, 'SubjectType'=>'user', 'Module'=>$module);
+                $model->add($data);
             }
             
             // Drop in the core actions
@@ -87,8 +87,7 @@ if (!empty($_POST)) {
                 )
             );
             foreach($actions as $action) {
-                $model->data = $action;
-                $model->add();
+                $model->add($action);
             }
             
             $appkey = $auth->randomString(20);

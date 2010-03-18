@@ -11,6 +11,8 @@
 
 class ActionsModel extends Model
 {
+	protected $criteria;    //Search criteria for find
+		
 	/**
      * __construct function initializes collection name
      * @access public
@@ -25,11 +27,11 @@ class ActionsModel extends Model
     /**
      * @see Library/Model#add()
      */
-	public function add()
+	public function add($data)
 	{
 		//Setup the criteria
-		$this->criteria = array('ActionName'=>$this->data['ActionName']);
-		return parent::add();
+		$this->criteria = array('ActionName'=>$data['ActionName']);
+		return parent::add($data);
 	}
 }
 ?>

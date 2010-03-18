@@ -81,23 +81,20 @@ class MongoDBHandler
      */
     function getData($sort = array(), $where = array())
     {
-        $retarray = array();
+        $retval = false;
         // Only try if the connection has been established.
         if ($this->_connected) {
                                     
             // Grab the data
             $cursor = $this->getCursor($where);
-            //$this->cursor = $this->col->find($where);
             if (is_object($cursor)) {
                 $cursor->sort($sort);
             	foreach($cursor as $obj){
-					$retarray[] = $obj;
+					$retval[] = $obj;
 				}			
-            }else{
-            	return false;
-            }           
+            }          
         }
-        return $retarray;
+        return $retval;
     }
     
     /**

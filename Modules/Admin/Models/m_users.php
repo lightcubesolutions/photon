@@ -10,6 +10,7 @@
 
 class UsersModel extends Model
 {
+	protected $criteria;    //Search criteria for find
 	/**
      * __construct function initializes collection name
      * @access public
@@ -25,11 +26,11 @@ class UsersModel extends Model
 	 * add function inserts data into MongoDB only if Username is unique
 	 * @return boolean
 	 */
-	function add()
+	function add($data)
 	{
 		//Setup the criteria
-		$this->criteria = array('Username'=>$this->data['Username']);
-		return parent::add();
+		$this->criteria = array('Username'=>$data['Username']);
+		return parent::add($data);
 	}
 	
 	/**

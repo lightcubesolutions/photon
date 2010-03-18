@@ -11,6 +11,8 @@
 
 class MenuItemsModel extends Model
 {
+	protected $criteria;    //Search criteria for find
+	
 	/**
      * __construct function initializes collection name
      * @access public
@@ -22,13 +24,12 @@ class MenuItemsModel extends Model
 		$this->col = $this->db->MenuItems;		
 	}
 	
-	function add()
+	function add($data)
 	{
 		//Setup the criteria
-		$this->criteria = array('_id'=>$this->data['_id']);
-		return parent::add();
+		$this->criteria = array('_id'=>$data['_id']);
+		return parent::add($data);
 	}
-
 }
 
 ?>

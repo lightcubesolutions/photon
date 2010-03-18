@@ -22,7 +22,7 @@ if (isset($_REQUEST['fetch'])) {
     } else {
         $children = $model->getData(array('SubjectType'=>1), array('Module'=>$pieces[0], 'ActionName'=>$pieces[1]));
     }
-
+	
     switch ($_REQUEST['fetch']) {
         
         case 'mysubjects':
@@ -106,7 +106,7 @@ if (isset($_REQUEST['fetch'])) {
     } else {
         $data['Module'] = $_REQUEST['action'];
     }
-    
+    //FIXME: Need to consider objectifying the save and remove col in switch
     switch ($_REQUEST['permmod']) {
         case 'add':
             $model->col->save($data);

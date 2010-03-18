@@ -116,21 +116,19 @@ if (isset($_REQUEST['fetch'])) {
         // Swap out values...
         $data['IsEnabled'] = ($data['IsEnabled'] == 'on') ? '1' : '0';
         
-        $model->data = $data;
-     
         $ui = new UITools;
         
         if (isset($_POST['add'])) {
-            if ($model->add()) {
+            if ($model->add($data)) {
                $ui->statusMsg('Successfully added the new group: '.$data['Name']);
             } else {
                $ui->statusMsg($model->error, 'error');
             }    
         } elseif (isset($_POST['update'])) {
-            $model->update();
+            $model->update($data);
             $ui->statusMsg("Successfully updated the group: $data[Name]");
         } elseif (isset($_POST['del'])) {
-            $model->delete();
+            $model->delete($data);
             $ui->statusMsg("Successfully deleted the group: $data[Name]");
         }
     }

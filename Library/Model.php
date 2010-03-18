@@ -14,20 +14,21 @@
 class Model extends MongoDBHandler
 {
 
-    public $data;        //Data to be inserted
-    public $criteria;    //Search criteria for find
+    private $_data;        //Data to be inserted
+    protected $criteria;    //Search criteria for find
     
     /**
      * update function
      * Updates document in MongoDB based on _id
      * @return void
      */
-    public function update()
+    public function update($data)
     {
-        unset($this->data['update']);
-        $id = new MongoID($this->data['_id']);
-        unset($this->data['_id']);
-        $this->col->update(array('_id'=>$id), array('$set'=>$this->data));        
+    	$this->_data = $data;
+        unset($this->_data['update']);
+        $id = new MongoID($this->_data['_id']);
+        unset($this->_data['_id']);
+        $this->col->update(array('_id'=>$id), array('$set'=>$this->_data));        
     }
     
     /**
@@ -35,9 +36,9 @@ class Model extends MongoDBHandler
      * Removes document from MongoDB based on _id 
      * @return void
      */
-    public function delete()
+    public function delete($data)
     {
-         $this->col->remove(array('_id'=>new MongoID($this->data['_id'])));
+         $this->col->remove(array('_id'=>new MongoID($data['_id'])));
     }
     
     /**
@@ -46,12 +47,12 @@ class Model extends MongoDBHandler
      * 
      * @return unknown_type
      */
-    public function add()
+    public function add($data)
     {
         $retval = false;
-
+		$this->_data = $data;
         // unset the $_POST add field
-        unset($this->data['add']);
+        unset($this->_data['add']);
         
         // Check if this should be a unique entry
         if (!empty($this->criteria)) {
@@ -79,7 +80,7 @@ class Model extends MongoDBHandler
     private function _insert()
     {
         $retval = false;
-        $status = $this->col->insert($this->data, true);
+        $status = $this->col->insert($this->_data, true);
         if ($status['ok']) {
             $retval = true;
         } else {
@@ -105,10 +106,11 @@ class Model extends MongoDBHandler
      * @access public
      * @return boolean
      */
-    public function push()
+    public function push($data)
     {
+    	//TODO: Check that $critieria and $data are set
     	$retval = false;
-    	$status = $this->col->update($this->criteria, array('$push' => $this->data), array("upsert" =>true));
+    	$status = $this->col->update($this->criteria, array('$push' => $data), array("upsert" =>true));
     	echo $status;
     	if($status == true){
     		$retval = true;

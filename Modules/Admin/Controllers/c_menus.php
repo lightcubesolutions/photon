@@ -49,9 +49,9 @@ if (isset($_REQUEST['fetch'])) {
 		        break;
 		}
 		
-		$model->data = $_POST;
-        $model->data['IsEnabled'] = ($model->data['IsEnabled'] == 'on') ? '1' : '0';
-		unset($model->data['type']);
+		$data = $_POST;
+        $data['IsEnabled'] = ($data['IsEnabled'] == 'on') ? '1' : '0';
+		unset($data['type']);
      	
     	if (isset($_POST['add'])) {
     	    
@@ -70,8 +70,8 @@ if (isset($_REQUEST['fetch'])) {
         				$ui->statusMsg('Please Enter a Name', 'error');
         			}
         			else {
-        				if ($model->add()) {
-        					$ui->statusMsg('Successfully added the new Menu Item: '.$model->data['Name']);			
+        				if ($model->add($data)) {
+        					$ui->statusMsg('Successfully added the new Menu Item: '.$data['Name']);			
         				} else {
         	               $ui->statusMsg($model->error, 'error');
         			 	}
@@ -80,8 +80,8 @@ if (isset($_REQUEST['fetch'])) {
         				
     	        case 'menu':
     	        default:
-        			if ($model->add()) {
-        				$ui->statusMsg('Successfully added the new Menu: '.$model->data['Name']);			
+        			if ($model->add($data)) {
+        				$ui->statusMsg('Successfully added the new Menu: '.$data['Name']);			
         			} else {
                        $ui->statusMsg($model->error, 'error');
         		 	}
@@ -89,11 +89,11 @@ if (isset($_REQUEST['fetch'])) {
     	    }   
 
     	} elseif (isset($_POST['update'])) {
-            $model->update();
-            $ui->statusMsg("Successfully updated $_POST[type]: ".$model->data['Name']);
+            $model->update($data);
+            $ui->statusMsg("Successfully updated $_POST[type]: ".$data['Name']);
         } elseif (isset($_POST['del'])) {
-            $model->delete();
-            $ui->statusMsg("Successfully deleted $_POST[type]: ".$model->data['Name']);
+            $model->delete($data);
+            $ui->statusMsg("Successfully deleted $_POST[type]: ".$data['Name']);
             if ($_POST['type'] == 'menu') {
                 $model = new MenuItemsModel;
                 $model->col->remove(array('MenuID'=>$this->data['_id']));
