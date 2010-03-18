@@ -150,10 +150,6 @@ class View
             
             // Add in the HTML header and footer, if necessary.
             if ($this->fullhtml) {
-                // Pull in the jquery and jquery-ui code.
-                $this->register('js', 'jquery-1.3.2.min.js');
-                $this->register('js', 'jquery-ui-1.7.2.custom.min.js');
-                $this->register('css', 'smoothness/jquery-ui-1.7.2.custom.css');
 
                 $this->_head = self::OPEN;
                 $this->_head .= "<head>\n";
